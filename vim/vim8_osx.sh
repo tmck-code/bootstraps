@@ -57,6 +57,12 @@ git clone https://github.com/thinca/vim-quickrun.git
 git clone https://github.com/ngmy/vim-rubocop.git
 git clone https://github.com/tpope/vim-sensible.git
 git clone https://github.com/tpope/vim-surround.git
+git clone https://github.com/kien/ctrlp.vim
+git clone https://github.com/nanotech/jellybeans.vim
+git clone https://github.com/godlygeek/tabular
+git clone https://github.com/ervandew/supertab
+git clone https://github.com/nathanaelkane/vim-indent-guides
+git clone https://github.com/honza/vim-snippets.git
 
 chown -R $USER:$USER $HOME/.vim/
 cp ./vimrc $HOME/.vimrc
