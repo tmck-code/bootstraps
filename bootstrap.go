@@ -70,6 +70,7 @@ func runTask(task string) {
 
 	cmd := exec.Command(binary)
 	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
 	execErr := cmd.Run()
 

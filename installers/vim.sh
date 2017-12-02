@@ -1,6 +1,22 @@
 #!/bin/bash
 set -euxo pipefail
 
+LOCAL_DIR=$(pwd)
+
+current_version="$(apt show -a vim)"
+
+if [[ $(echo $current_version | grep 'Version: 20') ]]; then
+  current_version_date=$(echo $current_version | sed 's/.*Version: 20/20/g' | awk '{ print $1 }' | cut -d- -f1)
+  if [ -n $current_version_date ]; then
+    todays_date=$(date +%Y%m%d)
+    days_since_update="$(( $todays_date - $current_version_date ))"
+    if [ $days_since_update -lt 7 ]; then
+      echo "Installed version is recent enough, skipping compilation"
+      exit 0
+    fi
+  fi
+fi
+
 sudo apt purge -y vim vim-common vim-runtime
 
 sudo apt install -y\
@@ -45,7 +61,7 @@ cd ./vim
     --enable-multibyte \
     --enable-fail-if-missing
 
-echo '> Compile vim8'
+echo '> Compiling and installing vim8'
 sudo checkinstall -y
 
 # Install pathogen, a vim plugin manager
@@ -59,7 +75,7 @@ fi
 cd $HOME/.vim/bundle
 
 function install_package() {
-        git clone https://github.com/$1 || echo "$1 is already installed"
+    git clone https://github.com/$1 || echo "$1 is already installed"
 }
 
 repos="Shougo/neocomplete.vim.git
@@ -85,7 +101,7 @@ ervandew/supertab
 nathanaelkane/vim-indent-guides
 honza/vim-snippets.git"
 
-for repo in repos; do install_package $repo ; done
+for repo in $repos; do install_package $repo ; done
 
 chown -R $USER:$USER $HOME/.vim/
-cp ./vimrc $HOME/.vimrc
+cp $LOCAL_DIR/installers/vimrc $HOME/.vimrc
