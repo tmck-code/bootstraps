@@ -4,7 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
+	"runtime"
 	"syscall"
 )
 
@@ -32,6 +34,8 @@ var (
 		"python": "installers/python.sh",
 		"vim":    "installers/vim.sh",
 	}
+	_, filePath, _, _ = runtime.Caller(0)
+	dirPath           = filepath.Dir(filePath)
 )
 
 func main() {
@@ -57,7 +61,7 @@ func main() {
 }
 
 func runTask(task string, args []string, env []string) {
-	binary, err := binaryPath(installScripts[task])
+	binary, err := binaryPath(path.Join(dirPath, installScripts[task]))
 	if err != nil {
 		fmt.Println("script for task does not exist:", task, installScripts[task], binary)
 		panic(err)
