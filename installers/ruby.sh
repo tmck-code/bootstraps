@@ -13,6 +13,6 @@ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB8
 export PATH="$PATH:$HOME/.rvm/bin"
 echo 'export PATH="$PATH:$HOME/.rvm/bin"' >> $HOME/.bash_profile
 
-# Install latest (stable) ruby & jruby
+# Install latest (stable) ruby
 rvm install 2.4.2
 

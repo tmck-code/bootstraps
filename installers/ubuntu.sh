@@ -17,17 +17,10 @@ sudo apt-get install -y \
 
 sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install libdvd-pkg
 
-# Kodi
-# sudo apt-get install -y software-properties-common
-# sudo add-apt-repository -y ppa:team-xbmc/ppa
-# sudo apt-get update
-# sudo apt-get install -y kodi
-
 # Plex media server
 # echo deb https://downloads.plex.tv/repo/deb ./public main | sudo tee /etc/apt/sources.list.d/plexmediaserver.list
 # curl https://downloads.plex.tv/plex-keys/PlexSign.key | sudo apt-key add -
 # sudo apt-get update && sudo apt-get install -y plexmediaserver
-
 
 # ffmpeg
 sudo apt-get install -y libass-dev libfreetype6-dev \
