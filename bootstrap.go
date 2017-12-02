@@ -3,11 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"runtime"
-	"syscall"
 )
 
 var (
@@ -48,29 +49,34 @@ func main() {
 	}
 	flag.VisitAll(visitor)
 
-	env := os.Environ()
-
 	fmt.Printf("tasks to run %v\n", tasks)
 	for i, stage := range installOrder {
 		stageTasks := tasksForStage(tasks, stage)
 		fmt.Printf("\ntasks for stage %d %-5s : %-s\n", i, stage, stageTasks)
 		for _, task := range stageTasks {
-			runTask(task, []string{}, env)
+			runTask(task)
 		}
 	}
 }
 
-func runTask(task string, args []string, env []string) {
+func runTask(task string) {
 	binary, err := binaryPath(path.Join(dirPath, installScripts[task]))
 	if err != nil {
 		fmt.Println("script for task does not exist:", task, installScripts[task], binary)
-		panic(err)
+		log.Fatal(err)
 	}
+
 	fmt.Printf("\n- executing task %-10s -> %-s\n\n", task, binary)
-	execErr := syscall.Exec(binary, args, env)
+
+	cmd := exec.Command(binary)
+	cmd.Stdout = os.Stdout
+
+	execErr := cmd.Run()
+
 	if execErr != nil {
-		panic(execErr)
+		log.Fatal(err)
 	}
+	fmt.Println("finished executing task", task)
 }
 
 func tasksForStage(tasks []string, stage string) []string {
