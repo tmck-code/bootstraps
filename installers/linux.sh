@@ -14,10 +14,14 @@ sudo apt install -y \
     docker docker-compose \
     git checkinstall locales
 
-cd $HOME
-git clone http://github.com/possatti/pokemonsay
-cd pokemonsay
+if [ ! -d $HOME/pokemonsay ]; then
+    cd $HOME
+    git clone http://github.com/possatti/pokemonsay
+    cd pokemonsay
+    ./install.sh
+    cd
+fi
 
-echo '> Setting locale & timezone'
-echo "Australia/Melbourne" > /etc/timezone
-dpkg-reconfigure -f noninteractive tzdata
+# echo '> Setting locale & timezone'
+# # echo "Australia/Melbourne" > /etc/timezone
+# sudo dpkg-reconfigure -f noninteractive tzdata
