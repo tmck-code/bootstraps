@@ -13,20 +13,15 @@ sudo apt-get install -y \
     docker docker-compose \
     wget git checkinstall locales build-essential yasm \
     htop iotop bmon nethogs \
-    vlc handbrake guake terminator
+    vlc handbrake guake terminator redshift
 
 sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install libdvd-pkg
 
-# Flux
-sudo add-apt-repository -y ppa:nathan-renniewaldock/flux
-sudo apt-get update
-sudo apt-get install -y fluxgui
-
 # Kodi
-sudo apt-get install -y software-properties-common
-sudo add-apt-repository -y ppa:team-xbmc/ppa
-sudo apt-get update
-sudo apt-get install -y kodi
+# sudo apt-get install -y software-properties-common
+# sudo add-apt-repository -y ppa:team-xbmc/ppa
+# sudo apt-get update
+# sudo apt-get install -y kodi
 
 # Plex media server
 echo deb https://downloads.plex.tv/repo/deb ./public main | sudo tee /etc/apt/sources.list.d/plexmediaserver.list
