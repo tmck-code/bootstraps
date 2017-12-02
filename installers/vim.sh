@@ -2,15 +2,17 @@
 set -euxo pipefail
 
 LOCAL_DIR=$(pwd)
+WEEK=604800
 
 current_version="$(apt show -a vim)"
 
-if [[ $(echo $current_version | grep 'Version: 20') ]]; then
-  current_version_date=$(echo $current_version | sed 's/.*Version: 20/20/g' | awk '{ print $1 }' | cut -d- -f1)
+if [ -f /usr/local/bin/vim ]; then
+  current_version_date=$(stat -c %Y /usr/local/bin/vim)
+
   if [ -n $current_version_date ]; then
-    todays_date=$(date +%Y%m%d)
+    todays_date=$(date +%s)
     days_since_update="$(( $todays_date - $current_version_date ))"
-    if [ $days_since_update -lt 7 ]; then
+    if [ $days_since_update -lt $WEEK ]; then
       echo "Installed version is recent enough, skipping compilation"
       exit 0
     fi
@@ -63,6 +65,8 @@ cd ./vim
 
 echo '> Compiling and installing vim8'
 sudo checkinstall -y
+
+sudo ln -s /usr/local/bin/vim /usr/bin/vim
 
 # Install pathogen, a vim plugin manager
 cd $HOME
