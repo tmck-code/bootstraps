@@ -5,6 +5,13 @@ A home for all my linux bootstrapping scripts, somewhat mirrors the contents of 
 ## Use thusly
 
 ```bash
+sudo apt update && \
+  sudo apt install -y git && \
+  git clone https://github.com/tmck-code/bootstraps.git && \
+  cd bootstraps
+```
+ 
+```bash
 ./ubuntu/bootstrap.sh \
   && ./langs/ruby.sh \
   && ./langs/python.sh \
