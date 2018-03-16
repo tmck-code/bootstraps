@@ -8,6 +8,12 @@ WEEK=604800
 
 current_version="$(apt show -a vim)"
 
+function install_packages() {
+  install_pathogen
+  install_core_packages
+  install_extra_packages
+}
+
 if [ -f /usr/local/bin/vim ]; then
   current_version_date=$(stat -c %Y /usr/local/bin/vim)
 
@@ -16,6 +22,7 @@ if [ -f /usr/local/bin/vim ]; then
     days_since_update="$(( $todays_date - $current_version_date ))"
     if [ $days_since_update -lt $WEEK ]; then
       echo "Installed version is recent enough, skipping compilation"
+      install_packages
       exit 0
     fi
   fi
@@ -68,10 +75,7 @@ sudo checkinstall -y
 
 sudo ln -s /usr/local/bin/vim /usr/bin/vim
 
-# Install vim packages
-install_pathogen
-install_core_packages
-install_extra_packages
+install_packages
 
 chown -R $USER:$USER $HOME/.vim/
 
