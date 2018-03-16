@@ -12,28 +12,34 @@ import (
 )
 
 var (
-	installLinux  = flag.Bool("linux", false, "install base linux dependencies")
-	installUbuntu = flag.Bool("ubuntu", false, "install base ubuntu dependencies")
-	installOsx    = flag.Bool("osx", false, "install base OSX dependencies")
-	installRuby   = flag.Bool("ruby", false, "install latest ruby")
-	installPython = flag.Bool("python", false, "install latest python")
-	installVim    = flag.Bool("vim", false, "install latest vim")
-	taskTypes     = map[string]string{
-		"linux":  "base",
-		"osx":    "base",
-		"ubuntu": "os",
-		"ruby":   "lang",
-		"python": "lang",
-		"vim":    "tool",
+	installGolang  = flag.Bool("golang",   false, "install latest golang")
+	installLinux   = flag.Bool("linux",    false, "install base linux dependencies")
+	installOsx     = flag.Bool("osx",      false, "install base OSX dependencies")
+	installPython  = flag.Bool("python",   false, "install latest python")
+	installRuby    = flag.Bool("ruby",     false, "install latest ruby")
+	installUbuntu  = flag.Bool("ubuntu",   false, "install base ubuntu dependencies")
+	installVim     = flag.Bool("vim",      false, "install latest vim")
+	installVimFull = flag.Bool("vim_full", false, "install latest vim compiled from source")
+	taskTypes      = map[string]string{
+		"golang":   "lang",
+		"linux":    "base",
+		"osx":      "base",
+		"python":   "lang",
+		"ruby":     "lang",
+		"ubuntu":   "os",
+		"vim":      "tool",
+		"vim_full": "tool",
 	}
 	installOrder   = []string{"base", "os", "lang", "tool"}
 	installScripts = map[string]string{
-		"linux":  "installers/linux.sh",
-		"osx":    "installers/osx.sh",
-		"ubuntu": "installers/ubuntu.sh",
-		"ruby":   "installers/ruby.sh",
-		"python": "installers/python.sh",
-		"vim":    "installers/vim.sh",
+		"golang":   "installers/golang.sh",
+		"linux":    "installers/linux.sh",
+		"osx":      "installers/osx.sh",
+		"python":   "installers/python.sh",
+		"ruby":     "installers/ruby.sh",
+		"ubuntu":   "installers/ubuntu.sh",
+		"vim":      "installers/vim_regular.sh",
+		"vim_full": "installers/vim.sh",
 	}
 	_, filePath, _, _ = runtime.Caller(0)
 	dirPath           = filepath.Dir(filePath)
@@ -96,3 +102,4 @@ func binaryPath(localPath string) (string, error) {
 	}
 	return filepath.Abs(localPath)
 }
+
