@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euxo pipefail
 
+. ${0%/*}/vim_plugins.sh
+
 LOCAL_DIR=$(pwd)
 WEEK=604800
 
@@ -51,8 +53,6 @@ echo '> Configure vim8'
 cd ./vim 
 ./configure \
     --with-features=huge \
-    --enable-rubyinterp \
-    --with-ruby-command=$HOME/.rvm/rubies/ruby-2.4.2/bin/ruby \
     --enable-python3interp \
     --enable-luainterp \
     --with-lua-prefix=/usr/include/lua5.3 \
@@ -68,44 +68,10 @@ sudo checkinstall -y
 
 sudo ln -s /usr/local/bin/vim /usr/bin/vim
 
-# Install pathogen, a vim plugin manager
-cd $HOME
-if [ ! -f .vim/autoload/pathogen.vim ]; then
-    mkdir -p .vim/autoload .vim/bundle
-    curl -LSso .vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-fi
-
-# Plugins -------------------------------------------------
-cd $HOME/.vim/bundle
-
-function install_package() {
-    git clone https://github.com/$1 || echo "$1 is already installed"
-}
-
-repos="Shougo/neocomplete.vim.git
-scrooloose/nerdtree.git
-mechatroner/rainbow_csv.git
-scrooloose/syntastic.git
-vim-airline/vim-airline.git
-vim-airline/vim-airline-themes.git
-altercation/vim-colors-solarized.git
-ryanoasis/vim-devicons
-tpope/vim-fugitive.git
-airblade/vim-gitgutter.git
-crusoexia/vim-monokai.git
-tyrannicaltoucan/vim-quantum.git
-thinca/vim-quickrun.git
-ngmy/vim-rubocop.git
-tpope/vim-sensible.git
-tpope/vim-surround.git
-kien/ctrlp.vim
-nanotech/jellybeans.vim
-godlygeek/tabular
-ervandew/supertab
-nathanaelkane/vim-indent-guides
-honza/vim-snippets.git"
-
-for repo in $repos; do install_package $repo ; done
+# Install vim packages
+install_pathogen
+install_core_packages
+install_extra_packages
 
 chown -R $USER:$USER $HOME/.vim/
-cp $LOCAL_DIR/installers/vimrc $HOME/.vimrc
+

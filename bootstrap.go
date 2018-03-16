@@ -38,8 +38,8 @@ var (
 		"python":   "installers/python.sh",
 		"ruby":     "installers/ruby.sh",
 		"ubuntu":   "installers/ubuntu.sh",
-		"vim":      "installers/vim_regular.sh",
-		"vim_full": "installers/vim.sh",
+		"vim":      "installers/vim.sh",
+		"vim_full": "installers/vim_full.sh",
 	}
 	_, filePath, _, _ = runtime.Caller(0)
 	dirPath           = filepath.Dir(filePath)
