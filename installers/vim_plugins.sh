@@ -30,6 +30,7 @@ Shougo/neocomplete.vim.git
 "
 
 function install_pathogen() {
+  cd $HOME
   mkdir -p .vim/autoload .vim/bundle
   curl -LSso .vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 }
@@ -42,12 +43,12 @@ export -f install_package
 
 function install_core_packages() {
   cd $HOME/.vim/bundle
-  echo ${core_repos} | tr ' ' '\n' | parallel -n 1 -P 10 install_package
+  echo ${core_repos} | tr ' ' '\n' | parallel -n 1 -P 2 install_package
   echo "- Installed all core vim packages"
 }
 
 function install_extra_packages() {
-  echo ${extra_repos} | tr ' ' '\n' | parallel -n 1 -P 10 install_package
+  echo ${extra_repos} | tr ' ' '\n' | parallel -n 1 -P 2 install_package
   echo "- Installed all extra vim packages"
 }
 

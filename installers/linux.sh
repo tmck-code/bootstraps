@@ -11,7 +11,7 @@ echo '> Installing basic dependencies'
 sudo apt install -y \
     curl \
     cowsay fortune \
-    tmux \
+    tmux parallel \
     docker \
     git checkinstall locales
 

@@ -12,6 +12,7 @@ import (
 )
 
 var (
+	installDebian  = flag.Bool("debian",   false, "install base debian dependencies")
 	installGolang  = flag.Bool("golang",   false, "install latest golang")
 	installLinux   = flag.Bool("linux",    false, "install base linux dependencies")
 	installOsx     = flag.Bool("osx",      false, "install base OSX dependencies")
@@ -21,6 +22,7 @@ var (
 	installVim     = flag.Bool("vim",      false, "install latest vim")
 	installVimFull = flag.Bool("vim_full", false, "install latest vim compiled from source")
 	taskTypes      = map[string]string{
+		"debian":   "os",
 		"golang":   "lang",
 		"linux":    "base",
 		"osx":      "base",
@@ -32,6 +34,7 @@ var (
 	}
 	installOrder   = []string{"base", "os", "lang", "tool"}
 	installScripts = map[string]string{
+		"debian":   "installers/debian.sh",
 		"golang":   "installers/golang.sh",
 		"linux":    "installers/linux.sh",
 		"osx":      "installers/osx.sh",
