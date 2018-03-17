@@ -3,26 +3,27 @@
 set -euxo pipefail
 
 core_repos="
-scrooloose/nerdtree.git
-mechatroner/rainbow_csv.git
-scrooloose/syntastic.git
-vim-airline/vim-airline.git
-vim-airline/vim-airline-themes.git
-altercation/vim-colors-solarized.git
-ryanoasis/vim-devicons
-tpope/vim-fugitive.git
 airblade/vim-gitgutter.git
+altercation/vim-colors-solarized.git
 crusoexia/vim-monokai.git
-tyrannicaltoucan/vim-quantum.git
-thinca/vim-quickrun.git
+ctrlp/ctrlp.vim
+ervandew/supertab
+godlygeek/tabular
+honza/vim-snippets.git
+joshdick/onedark.vim.git
+mechatroner/rainbow_csv.git
+nanotech/jellybeans.vim
 ngmy/vim-rubocop.git
+ryanoasis/vim-devicons
+scrooloose/nerdtree.git
+scrooloose/syntastic.git
+thinca/vim-quickrun.git
+tpope/vim-fugitive.git
 tpope/vim-sensible.git
 tpope/vim-surround.git
-ctrlp/ctrlp.vim
-nanotech/jellybeans.vim
-godlygeek/tabular
-ervandew/supertab
-honza/vim-snippets.git
+tyrannicaltoucan/vim-quantum.git
+vim-airline/vim-airline-themes.git
+vim-airline/vim-airline.git
 "
 
 extra_repos="
