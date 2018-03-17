@@ -27,3 +27,17 @@ First, launch Powershell in Administrator mode
 ```
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
 ```
+
+## Snippets
+
+### Windows
+
+#### Hyper terminal
+
+```
+# In admin powershell:
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+choco install yarn
+yarn global add windows-build-tools
+choco install hyper
+```
