@@ -12,17 +12,17 @@ import (
 )
 
 var (
-	installDebian  = flag.Bool("debian",   false, "install base debian dependencies")
-	installDebian  = flag.Bool("dotfiles", false, "deploy dotfiles from repo")
-	installGolang  = flag.Bool("golang",   false, "install latest golang")
-	installLinux   = flag.Bool("linux",    false, "install base linux dependencies")
-	installOsx     = flag.Bool("osx",      false, "install base OSX dependencies")
-	installPython  = flag.Bool("python",   false, "install latest python")
-	installRuby    = flag.Bool("ruby",     false, "install latest ruby")
-	installUbuntu  = flag.Bool("ubuntu",   false, "install base ubuntu dependencies")
-	installVim     = flag.Bool("vim",      false, "install latest vim")
-	installVimFull = flag.Bool("vim_full", false, "install latest vim compiled from source")
-	taskTypes      = map[string]string{
+	installDebian   = flag.Bool("debian",   false, "install base debian dependencies")
+	installDotfiles = flag.Bool("dotfiles", false, "deploy dotfiles from repo")
+	installGolang   = flag.Bool("golang",   false, "install latest golang")
+	installLinux    = flag.Bool("linux",    false, "install base linux dependencies")
+	installOsx      = flag.Bool("osx",      false, "install base OSX dependencies")
+	installPython   = flag.Bool("python",   false, "install latest python")
+	installRuby     = flag.Bool("ruby",     false, "install latest ruby")
+	installUbuntu   = flag.Bool("ubuntu",   false, "install base ubuntu dependencies")
+	installVim      = flag.Bool("vim",      false, "install latest vim")
+	installVimFull  = flag.Bool("vim_full", false, "install latest vim compiled from source")
+	taskTypes       = map[string]string{
 		"debian":   "os",
 		"dotfiles": "config",
 		"golang":   "lang",
