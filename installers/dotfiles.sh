@@ -11,7 +11,11 @@ else
 fi
 
 cd dotfiles
-cp bash_aliases ~/.bash_aliases
+mkdir -p ~/bin/
+
+cp lean/bash_aliases ~/.bash_aliases
+cp lean/bin/*        ~/bin/
+
 cp bashrc       ~/.bashrc
 cp vimrc        ~/.vimrc
 cp gitconfig    ~/.gitconfig
