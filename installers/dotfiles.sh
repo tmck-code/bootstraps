@@ -10,4 +10,5 @@ cp bash_aliases ~/.bash_aliases
 cp bashrc       ~/.bashrc
 cp vimrc        ~/.vimrc
 cp gitconfig    ~/.gitconfig
+cp tmux_conf    ~/.tmux.conf
 
