@@ -2,16 +2,17 @@
 
 set -euxo pipefail
 
-dvd_drive=true
-multimedia=true
+dvd_drive=false
+multimedia=false
 
 # Update, remove crap & upgrade
-sudo apt remove -y libreoffice* thunderbird* rhythmbox*
 sudo apt update
+sudo apt remove -y libreoffice* thunderbird* rhythmbox* shotwell* && sudo apt autoremove -y
 sudo apt upgrade -y
 
 # Update to newest version of distro (if available)
-sudo do-release-upgrade -f DistUpgradeViewNonInteractive
+sudo sed -i 's/^Prompt=lts/Prompt=normal/g' /etc/update-manager/release-upgrades
+sudo do-release-upgrade  -f DistUpgradeViewNonInteractive
 
 # Basic deps
 sudo apt install -y \
