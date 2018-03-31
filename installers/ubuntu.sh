@@ -10,10 +10,6 @@ sudo apt update
 sudo apt remove -y libreoffice* thunderbird* rhythmbox* shotwell* && sudo apt autoremove -y
 sudo apt upgrade -y
 
-# Update to newest version of distro (if available)
-sudo sed -i 's/^Prompt=lts/Prompt=normal/g' /etc/update-manager/release-upgrades
-sudo do-release-upgrade  -f DistUpgradeViewNonInteractive
-
 # Basic deps
 sudo apt install -y \
   wget curl git \
@@ -22,6 +18,10 @@ sudo apt install -y \
   checkinstall locales build-essential yasm \
   docker \
   handbrake guake redshift
+
+# Update to newest version of distro (if available)
+sudo sed -i 's/^Prompt=lts/Prompt=normal/g' /etc/update-manager/release-upgrades
+sudo do-release-upgrade  -f DistUpgradeViewNonInteractive
 
 # Bypass DVD copy protection
 if $dvd_drive; then
