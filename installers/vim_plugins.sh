@@ -16,6 +16,7 @@ nanotech/jellybeans.vim
 ngmy/vim-rubocop.git
 ryanoasis/vim-devicons
 scrooloose/nerdtree.git
+rakr/vim-one.git
 scrooloose/syntastic.git
 thinca/vim-quickrun.git
 tpope/vim-fugitive.git
