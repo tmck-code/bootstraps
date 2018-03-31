@@ -21,7 +21,7 @@ sudo apt install -y \
 
 # Update to newest version of distro (if available)
 sudo sed -i 's/^Prompt=lts/Prompt=normal/g' /etc/update-manager/release-upgrades
-sudo do-release-upgrade  -f DistUpgradeViewNonInteractive
+sudo do-release-upgrade -f DistUpgradeViewNonInteractive || echo "no new releases"
 
 # Bypass DVD copy protection
 if $dvd_drive; then
