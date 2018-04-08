@@ -14,5 +14,5 @@ export PATH="$PATH:$HOME/.rvm/bin"
 echo 'export PATH="$PATH:$HOME/.rvm/bin"' >> $HOME/.bash_profile
 
 # Install latest (stable) ruby
-rvm install 2.4.2
+rvm install 2.5.1
 
