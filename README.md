@@ -4,12 +4,25 @@ A home for all my linux bootstrapping scripts, somewhat mirrors the contents of 
 
 ## Use thusly
 
+### Repo via https
+
 ```bash
 sudo apt update && \
   sudo apt install -y git && \
   git clone https://github.com/tmck-code/bootstraps.git && \
   cd bootstraps
 ```
+
+### Repo via ssh
+
+```bash
+sudo apt update && \
+  sudo apt install -y git && \
+  git clone git@github.com:tmck-code/bootstraps.git && \
+  cd bootstraps
+```
+ 
+ ### Run bootstraps
  
 ```bash
 ./ubuntu/bootstrap.sh \
