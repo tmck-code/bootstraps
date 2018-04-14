@@ -20,8 +20,8 @@ sudo apt install -y \
   handbrake guake redshift
 
 # Update to newest version of distro (if available)
-sudo sed -i 's/^Prompt=lts/Prompt=normal/g' /etc/update-manager/release-upgrades
-sudo do-release-upgrade -f DistUpgradeViewNonInteractive || echo "no new releases"
+# sudo sed -i 's/^Prompt=lts/Prompt=normal/g' /etc/update-manager/release-upgrades
+# sudo do-release-upgrade -f DistUpgradeTextView || echo "no new releases"
 
 # Bypass DVD copy protection
 if $dvd_drive; then
