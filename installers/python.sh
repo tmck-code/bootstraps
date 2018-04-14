@@ -2,24 +2,16 @@
 
 set -euxo pipefail
 
-# rm -rf $HOME/.pyenv
+version=3.6.4
 
-PYTHON_VERSION=3.6.4
+mkdir -p /usr/local/src
+cd /usr/local/src
+wget "https://www.python.org/ftp/python/${version}/Python-${version}.tgz"
 
-# Install some dependencies
-sudo apt-get install -y \
-  libreadline-dev \
-  libssl-dev \
-  zlib1g-dev libbz2-dev \
-  libsqlite3-dev
+tar xvzf "Python-${version}.tgz"
 
-curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-pyenv update
-pyenv install $PYTHON_VERSION
-echo $PYTHON_VERSION > $HOME/.pyenv/version
+cd Python-${version}
+./configure
+make
+sudo make altinstall
 
