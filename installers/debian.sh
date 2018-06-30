@@ -18,6 +18,7 @@ function install_firefox() {
 
 # Update & upgrade
 sudo apt update
+sudo apt remove -y libreoffice* thunderbird* rhythmbox* shotwell* && sudo apt autoremove -y
 sudo apt upgrade -y
 
 # Basic deps
