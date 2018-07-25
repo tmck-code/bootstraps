@@ -13,7 +13,10 @@ sudo apt install -y \
     cowsay fortune \
     tmux parallel \
     docker \
-    git checkinstall locales
+    git \
+    checkinstall locales \
+    bc \
+    htop bmon iotop sysstat net-tools
 
 if [ ! -f $HOME/bin/pokemonsay ]; then
     git clone http://github.com/possatti/pokemonsay
