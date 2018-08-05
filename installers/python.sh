@@ -11,7 +11,7 @@ wget "https://www.python.org/ftp/python/${version}/Python-${version}.tgz"
 tar xvzf "Python-${version}.tgz"
 
 cd Python-${version}
-./configure --enable-optimizations
+./configure --enable-optimizations --with-ensurepip=install
 make -j 4
 sudo make altinstall
 
