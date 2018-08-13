@@ -2,24 +2,24 @@
 
 set -euxo pipefail
 
-version="4.15.16"
+version="4.17.1"
 revision="1"
 ipts="v78"
 i915="skl"
 
-sudo mkdir -p /usr/local/src
+sudo mkdir -p /usr/local/src && sudo chown freman:freman /usr/local/src/
 cd /usr/local/src
 
 debs=(
-  "linux-headers-4.15.16-surface-linux-surface_4.15.16-surface-linux-surface-37_amd64.deb"
-  "linux-image-4.15.16-surface-linux-surface_4.15.16-surface-linux-surface-37_amd64.deb"
+  "linux-headers-${version}-surface-linux-surface_${version}-surface-linux-surface-3_amd64.deb"
+  "linux-image-${version}-surface-linux-surface_${version}-surface-linux-surface-3_amd64.deb"
 )
+source="${version}-${revision}"
 
-for file in ${files[@]}; do
-  [ -f "${file}" ] || wget https://github.com/jakeday/linux-surface/releases/download/4.15.16-1/${file}
+for file in ${debs[@]}; do
+  [ -f "${file}" ] || wget https://github.com/jakeday/linux-surface/releases/download/${source}/${file}
 done
 
-source="4.15.16-1"
 [ -f "${source}.tar.gz" ] || wget https://github.com/jakeday/linux-surface/archive/${source}.tar.gz
 
 rm -rf linux-surface-${source}
@@ -41,7 +41,7 @@ sudo mkdir -p /lib/firmware/i915
 sudo unzip firmware/i915_firmware_${i915}.zip -d /lib/firmware/i915/
 
 # 5. (Ubuntu 17.10) Fix issue with Suspend to Disk:
-sudo ln -s /lib/systemd/system/hibernate.target /etc/systemd/system/suspend.target && sudo ln -s /lib/systemd/system/systemd-hibernate.service /etc/systemd/system/systemd-suspend.service
+# sudo ln -s /lib/systemd/system/hibernate.target /etc/systemd/system/suspend.target && sudo ln -s /lib/systemd/system/systemd-hibernate.service /etc/systemd/system/systemd-suspend.service
 # 5. (all other distros) Fix issue with Suspend to Disk:
 # sudo ln -s /usr/lib/systemd/system/hibernate.target /etc/systemd/system/suspend.target && sudo ln -s /usr/lib/systemd/system/systemd-hibernate.service /etc/systemd/system/systemd-suspend.service
 
