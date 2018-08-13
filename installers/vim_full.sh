@@ -30,21 +30,15 @@ fi
 
 sudo apt purge -y vim vim-common vim-runtime
 
-sudo apt install -y\
+sudo apt purge -y\
     libncurses5-dev \
     libgtk2.0-dev libatk1.0-dev libbonoboui2-dev libcairo2-dev libx11-dev \
     libxpm-dev libxt-dev \
     checkinstall \
     python-dev python3-dev \
-    liblua5.3-0 liblua5.3-dev \
     libperl-dev
 
-if [ ! -d /usr/include/lua5.3/include ]; then
-    sudo mkdir /usr/include/lua5.3/{include,lib}
-    sudo cp /usr/include/lua5.3/*.h /usr/include/lua5.3/include/
-    sudo ln -sf /usr/lib/x86_64-linux-gnu/liblua5.3.so /usr/include/lua5.3/lib/liblua.so
-    sudo ln -sf /usr/lib/x86_64-linux-gnu/liblua5.3.a /usr/include/lua5.3/lib/liblua.a
-fi
+sudo apt install -y liblua5.3.0 liblua5.3-dev
 
 # Download & install vim8 ---------------------------------
 
@@ -61,15 +55,13 @@ cd ./vim
 ./configure \
     --with-features=huge \
     --enable-python3interp \
-    --enable-luainterp \
-    --with-lua-prefix=/usr/include/lua5.3 \
     --enable-gui=no \
     --without-x \
     --enable-cscope \
     --enable-largefile \
     --enable-multibyte \
     --enable-fail-if-missing
-
+sudo apt install -y checkinstall
 echo '> Compiling and installing vim8'
 sudo checkinstall -y
 
