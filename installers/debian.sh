@@ -16,27 +16,49 @@ function install_firefox() {
   sudo ln -s /opt/firefox/firefox/firefox /usr/lib/firefox-esr/firefox-esr
 }
 
-# Update & upgrade
-sudo apt update
-sudo apt remove -y libreoffice* thunderbird* rhythmbox* shotwell* && sudo apt autoremove -y
-sudo apt upgrade -y
+function install_icons() {
+  sudo add-apt-repository -y ppa:snwh/pulp
+  sudo apt update
+  sudo apt install paper-icon-theme paper-cursor-theme paper-gtk-theme
+}
 
-# Basic deps
-sudo apt install -y \
-  wget curl git \
-  tmux htop iotop bmon nethogs \
-  cowsay fortune \
-  checkinstall locales build-essential yasm \
-  docker \
-  handbrake redshift
+function install_packages() {
+  # Update & upgrade
+  sudo apt update
+  sudo apt remove -y libreoffice* thunderbird* rhythmbox* shotwell* firefox*
+  sudo apt autoremove -y
+  sudo apt upgrade -y
 
-# Clean up
-sudo apt autoremove -y
+  # Basic deps
+  sudo apt install -y \
+    wget curl git \
+    tmux htop iotop bmon nethogs \
+    cowsay fortune \
+    checkinstall locales build-essential yasm \
+    redshift
 
-install_firefox
+  # Clean up
+  sudo apt autoremove -y
+}
 
-echo "
-[device]
-wifi.scan-rand-mac-address=no
-" >> /etc/NetworkManager/NetworkManager.conf 
+function wifi() {
+  echo "
+  [device]
+  wifi.scan-rand-mac-address=no
+  " >> /etc/NetworkManager/NetworkManager.conf
+}
+
+function run() {
+  install_packages
+  install_firefox
+  install_icons
+}
+
+case ${1} in
+  "icons" )    install_icons ;;
+  "firefox" )  install_firefox ;;
+  "packages" ) install_packages ;;
+  "wifi" )     wifi ;;
+  "run" )      run ;;
+esac
 
