@@ -26,7 +26,7 @@ function install_packages() {
   # Update & upgrade
   sudo apt update
   sudo apt remove -y libreoffice* thunderbird* rhythmbox* shotwell* firefox*
-  sudo apt autoremove -y
+  sudo apt-get autoremove
   sudo apt upgrade -y
 
   # Basic deps
@@ -38,7 +38,7 @@ function install_packages() {
     redshift
 
   # Clean up
-  sudo apt autoremove -y
+  sudo apt-get autoremove
 }
 
 function wifi() {

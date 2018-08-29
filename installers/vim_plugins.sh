@@ -38,7 +38,7 @@ function install_pathogen() {
 }
 
 function install_package() {
-  git clone http://github.com/${1} || echo "- Vim package already exists:${1}" 
+  git clone git@github.com:${1} || echo "- Vim package already exists:${1}" 
 }
 
 export -f install_package
@@ -54,5 +54,5 @@ function install_extra_packages() {
   echo "- Installed all extra vim packages"
 }
 
-install_pathogen
-install_core_packages
+# install_pathogen
+# install_core_packages

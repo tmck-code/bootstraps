@@ -38,8 +38,6 @@ sudo apt purge -y\
     python-dev python3-dev \
     libperl-dev
 
-sudo apt install -y liblua5.3.0 liblua5.3-dev
-
 # Download & install vim8 ---------------------------------
 
 echo '> Cloning vim8 from git'
