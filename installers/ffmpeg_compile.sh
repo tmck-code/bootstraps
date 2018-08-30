@@ -31,7 +31,7 @@ function younger_than_a_week() {
 
 function nasm() {
   cd ~/ffmpeg_sources
-  if younger_than_a_week nasm-2.13.03; then return;  fi
+  # if younger_than_a_week nasm-2.13.03; then return;  fi
 
   wget https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.bz2
   tar xjvf nasm-2.13.03.tar.bz2
@@ -49,7 +49,7 @@ function yasm() {
 
 function x264() {
   cd ~/ffmpeg_sources
-  if younger_than_a_week x264; then return;  fi
+  # if younger_than_a_week x264; then return;  fi
 
   git -C x264 pull 2> /dev/null || git clone --depth 1 https://git.videolan.org/git/x264
   cd x264
@@ -61,7 +61,7 @@ function x264() {
 function x265() {
   sudo apt install -y mercurial libnuma-dev
   cd ~/ffmpeg_sources
-  if younger_than_a_week x265; then return;  fi
+  # if younger_than_a_week x265; then return;  fi
 
   if [ -d x265 ]; then
     (cd x265 && hg pull && hg update)
@@ -86,8 +86,8 @@ function ffmpeg() {
   cd ~/ffmpeg_sources
   # if younger_than_a_week ffmpeg; then return; fi
     
-  # wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
-  # tar xjvf ffmpeg-snapshot.tar.bz2
+  wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
+  tar xjvf ffmpeg-snapshot.tar.bz2
   cd ffmpeg
   PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
     --prefix="$HOME/ffmpeg_build" \
