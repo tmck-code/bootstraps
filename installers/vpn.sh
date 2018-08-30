@@ -2,13 +2,14 @@
 
 set -euxo pipefail
 
-# Install Gnome Network Manager dependencies
-sudo apt install -y network-manager-openvpn* openvpn
+# Dependencies
+sudo apt install -y \
+  network-manager-openvpn* \
+  openvpn \
+  uuid-runtime
 
 # Download all ovpn files from PIA
 sudo mkdir -p /tmp/openvpn && cd /tmp/openvpn
-sudo wget https://www.privateinternetaccess.com/openvpn/openvpn.zip
-sudo unzip openvpn.zip
+sudo wget https://www.privateinternetaccess.com/installer/pia-nm.sh
 
-# Install ovpn configurations
-sudo nmcli connection import type openvpn file /tmp/openvpn/Singapore.ovpn
+sudo bash pia-nm.sh
