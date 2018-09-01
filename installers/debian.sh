@@ -26,7 +26,7 @@ function install_packages() {
   # Update & upgrade
   sudo apt update
   sudo apt remove -y libreoffice* thunderbird* rhythmbox* shotwell* firefox*
-  sudo apt-get autoremove
+  sudo apt-get autoremove -y
   sudo apt upgrade -y
 
   # Basic deps
@@ -38,7 +38,7 @@ function install_packages() {
     redshift
 
   # Clean up
-  sudo apt-get autoremove
+  sudo apt-get autoremove -y
 }
 
 function wifi() {
@@ -50,14 +50,13 @@ function wifi() {
 
 function run() {
   install_packages
-  install_firefox
   install_icons
 }
 
 case ${1} in
+  "packages" ) install_packages ;;
   "icons" )    install_icons ;;
   "firefox" )  install_firefox ;;
-  "packages" ) install_packages ;;
   "wifi" )     wifi ;;
   "run" )      run ;;
 esac
