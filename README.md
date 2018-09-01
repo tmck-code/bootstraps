@@ -4,9 +4,8 @@ A home for all my linux bootstrapping scripts, somewhat mirrors the contents of 
 
 ## Use thusly
 
-### Repo via https
-
-### Repo via ssh
+* is _slightly_more annoying/more effort to set up, but is worth it in the future
+### Pull repo via ssh
 
 ```bash
 sudo apt update && \
@@ -15,6 +14,8 @@ sudo apt update && \
   cd bootstraps
 ```
 
+### Pull repo via https
+
 ```bash
 sudo apt update && \
   sudo apt install -y git && \
@@ -22,13 +23,19 @@ sudo apt update && \
   cd bootstraps
 ```
  
- ### Run bootstraps
+ ## Example boostraps
+ 
+ ### Ubuntu
  
 ```bash
-./ubuntu/bootstrap.sh \
-  && ./langs/ruby.sh \
-  && ./langs/python.sh \
-  && ./langs/go.sh
+sudo apt update && \
+  sudo apt install -y git && \
+  git clone git@github.com:tmck-code/bootstraps.git && \
+  cd bootstraps && \
+  ./installers/ubuntu.sh &&
+  ./installers/linux && \
+  ./installers/tools && \
+  ./installers/dotfile
 ```
 
 ## Windows preparation
