@@ -23,26 +23,26 @@ vim-airline/vim-airline.git
 EOF
 )
 
-extra_repos="
-Shougo/neocomplete.vim.git
-"
+N_CONCURRENT_DOWNLOADS=8
 
 function install_pathogen() {
+  echo "- Installing Pathogen (plugin/package manager)"
   cd $HOME
   mkdir -p .vim/autoload .vim/bundle
   curl -LSso .vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 }
 
 function install_package() {
-  git clone git@github.com:${1} || echo "- Vim package already exists:${1}" 
+  echo "- Installing vim plugin: ${1}"
+  git clone git@github.com:${1} || echo "- vim plugin already exists: ${1}"
 }
-
 export -f install_package
 
 function install_core_packages() {
+  echo "- Installing core vim plugins"
   cd $HOME/.vim/bundle
-  echo ${core_repos} | tr ' ' '\n' | parallel -n 1 -P 15 install_package
-  echo "- Installed all core vim packages"
+  echo "${core_repos}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_package
+  echo "- Installed all core vim plugins"
 }
 
 function install_extra_packages() {
