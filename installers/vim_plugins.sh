@@ -1,18 +1,14 @@
 #!/bin/bash
 
-set -euxo pipefail
+set -euo pipefail
 
-core_repos="
+core_repos=$(cat <<EOF
 airblade/vim-gitgutter.git
-altercation/vim-colors-solarized.git
-crusoexia/vim-monokai.git
-ctrlp/ctrlp.vim
+ctrlpvim/ctrlp.vim
 ervandew/supertab
 godlygeek/tabular
 honza/vim-snippets.git
-joshdick/onedark.vim.git
 mechatroner/rainbow_csv.git
-nanotech/jellybeans.vim
 ngmy/vim-rubocop.git
 ryanoasis/vim-devicons
 scrooloose/nerdtree.git
@@ -22,10 +18,10 @@ thinca/vim-quickrun.git
 tpope/vim-fugitive.git
 tpope/vim-sensible.git
 tpope/vim-surround.git
-tyrannicaltoucan/vim-quantum.git
 vim-airline/vim-airline-themes.git
 vim-airline/vim-airline.git
-"
+EOF
+)
 
 extra_repos="
 Shougo/neocomplete.vim.git
