@@ -45,10 +45,11 @@ function install_core_packages() {
   echo "- Installed all core vim plugins"
 }
 
-function install_extra_packages() {
-  echo ${extra_repos} | tr ' ' '\n' | parallel -n 1 -P 2 install_package
-  echo "- Installed all extra vim packages"
-}
+# Don't run if we're just sourcing the file
+if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
+  echo "- Sourced vim plugin functions"
+else
+  install_pathogen
+  install_core_packages
+fi
 
-# install_pathogen
-# install_core_packages
