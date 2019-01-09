@@ -20,6 +20,7 @@ tiagofumo/vim-nerdtree-syntax-highlight
 tpope/vim-fugitive
 tpope/vim-sensible
 tpope/vim-surround
+tyrannicaltoucan/vim-quantum.git
 vim-airline/vim-airline-themes
 vim-airline/vim-airline
 EOF
