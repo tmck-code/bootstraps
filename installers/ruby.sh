@@ -2,6 +2,8 @@
 
 set -euxo pipefail
 
+VERSION="2.5.1"
+
 sudo apt-get install -y curl gnupg2
 
 # Get the RVM gpg key ("Michal Papis (RVM signing) <mpapis@gmail.com>")
@@ -14,5 +16,5 @@ export PATH="$PATH:$HOME/.rvm/bin"
 echo 'export PATH="$PATH:$HOME/.rvm/bin"' >> $HOME/.bash_profile
 
 # Install latest (stable) ruby
-rvm install 2.5.1
+rvm install $VERSION
 
