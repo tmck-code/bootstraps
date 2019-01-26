@@ -11,7 +11,6 @@ current_version="$(apt show -a vim)"
 function install_packages() {
   install_pathogen
   install_core_packages
-  install_extra_packages
 }
 
 if [ -f /usr/local/bin/vim ]; then
@@ -30,13 +29,13 @@ fi
 
 sudo apt purge -y vim vim-common vim-runtime
 
-sudo apt purge -y\
+sudo apt install -y \
     libncurses5-dev \
     libgtk2.0-dev libatk1.0-dev libbonoboui2-dev libcairo2-dev libx11-dev \
     libxpm-dev libxt-dev \
     checkinstall \
-    python-dev python3-dev \
-    libperl-dev
+    libperl-dev \
+    python3-dev
 
 # Download & install vim8 ---------------------------------
 
@@ -45,14 +44,15 @@ sudo chown -R $USER:$USER /usr/local/src && cd /usr/local/src
 if [ -d vim ]; then
     cd vim ; git pull ; cd ../
 else
-  git clone git@github.com:vim/vim.git
+  git clone --depth 1 git@github.com:vim/vim.git
 fi
 
 echo '> Configure vim8'
-cd ./vim 
+cd ./vim
 ./configure \
     --with-features=huge \
     --enable-python3interp \
+    --with-python3-config-dir=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/ \
     --enable-gui=no \
     --without-x \
     --enable-cscope \

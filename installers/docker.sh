@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt purge docker docker-engine docker.io
+sudo apt purge -y docker docker-engine docker.io
 sudo apt update
 sudo apt install -y \
     apt-transport-https \
@@ -8,9 +8,9 @@ sudo apt install -y \
     curl \
     software-properties-common
 
-curl -fsSL https://download.docker.com/linux/$(lsb_release -is)/gpg | sudo apt-key add -
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/$(lsb_release -is) \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
 
