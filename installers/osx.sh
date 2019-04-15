@@ -11,7 +11,7 @@ cat ~/.ssh/id_ed25519.pub
 
 echo "- Installing homebrew"
 xcode-select --install
-mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
+which homebrew || cd /usr/local && mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
 
 brew update
 
@@ -24,6 +24,8 @@ brew install \
   parallel \
   gnupg2
 
+brew reinstall openssl
+
 # Core GNU file/shell/text utilities
 brew install coreutils diffutils gnutls gzip watch wget
 # GNU find, xargs & locate
@@ -31,6 +33,7 @@ brew install findutils --with-default-names
 brew install gnu-sed --with-default-names
 brew install grep --with-default-names
 
+cd $HOME
 if [ ! -f $HOME/bin/pokemonsay ]; then
   echo "- Installing pokemonsay"
   git clone http://github.com/possatti/pokemonsay

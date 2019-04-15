@@ -3,29 +3,37 @@
 set -euo pipefail
 
 core_repos=$(cat <<EOF
+AndrewRadev/splitjoin.vim.git
 airblade/vim-gitgutter
 ctrlpvim/ctrlp.vim
+dyng/ctrlsf.vim.git
 ervandew/supertab
 godlygeek/tabular
 honza/vim-snippets
 mechatroner/rainbow_csv
 ngmy/vim-rubocop
 ntpeters/vim-better-whitespace
+thinca/vim-quickrun
+tpope/vim-fugitive
+tpope/vim-sensible
+tpope/vim-surround
+zxqfl/tabnine-vim
+EOF
+)
+
+aesthetic_repos=$( <<EOF
+fenetikm/falcon
+morhetz/gruvbox
 rakr/vim-one
 ryanoasis/vim-devicons
 scrooloose/nerdtree
 scrooloose/syntastic
-thinca/vim-quickrun
 tiagofumo/vim-nerdtree-syntax-highlight
-tpope/vim-fugitive
-tpope/vim-sensible
-tpope/vim-surround
 tyrannicaltoucan/vim-quantum.git
-vim-airline/vim-airline-themes
 vim-airline/vim-airline
+vim-airline/vim-airline-themes
 EOF
 )
-
 N_CONCURRENT_DOWNLOADS=8
 
 function install_pathogen() {
