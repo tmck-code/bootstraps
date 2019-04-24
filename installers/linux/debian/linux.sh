@@ -9,17 +9,13 @@ sudo apt update
 
 echo '> Installing basic dependencies'
 sudo apt install -y \
-    curl \
+    curl tmux parallel \
     cowsay fortune \
-    tmux parallel \
-    docker \
-    git \
-    checkinstall locales \
-    bc \
-    htop bmon iotop sysstat net-tools
+    docker git checkinstall locales \
+    bc htop bmon iotop sysstat net-tools
 
 if [ ! -f $HOME/bin/pokemonsay ]; then
-    git clone http://github.com/possatti/pokemonsay
+    git clone --depth 1 http://github.com/possatti/pokemonsay
     (cd pokemonsay && ./install.sh)
 fi
 
