@@ -2,7 +2,10 @@
 
 set -euxo pipefail
 
-version=3.6.5
+if [ -z "${PYTHON_INSTALL_VERSION}" ]; then
+  echo "Must set 'PYTHON_INSTALL_VERSION' env var, e.g. 3.7.2"
+  exit 1
+fi
 
 mkdir -p /usr/local/src
 cd /usr/local/src
