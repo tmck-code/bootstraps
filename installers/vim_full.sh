@@ -15,7 +15,6 @@ function install_packages() {
   install_core_packages
 }
 
-<<<<<<< HEAD
 if [ -f /usr/local/bin/vim ]; then
   current_version_date=$(stat -c %Y /usr/local/bin/vim)
 
@@ -39,21 +38,6 @@ sudo apt install -y \
     checkinstall \
     libperl-dev \
     python3-dev
-=======
-# if [ -f /usr/local/bin/vim ]; then
-#   current_version_date=$(stat -c %Y /usr/local/bin/vim)
-#
-#   if [ -n $current_version_date ]; then
-#     todays_date=$(date +%s)
-#     days_since_update="$(( $todays_date - $current_version_date ))"
-#     if [ $days_since_update -lt $WEEK ]; then
-#       echo "- Installed version is recent enough, skipping compilation"
-#       install_packages
-#       exit 0
-#     fi
-#   fi
-# fi
->>>>>>> Update vim bootstrapper
 
 # Download & install vim8 ---------------------------------
 
@@ -71,11 +55,6 @@ cd ./vim
 ./configure \
     --with-features=huge \
     --enable-python3interp \
-<<<<<<< HEAD
-    --with-python3-config-dir=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/ \
-=======
-    --enable-rubyinterp \
->>>>>>> Update vim bootstrapper
     --enable-gui=no \
     --without-x \
     --enable-cscope \
