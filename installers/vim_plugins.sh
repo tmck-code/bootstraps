@@ -17,11 +17,10 @@ thinca/vim-quickrun
 tpope/vim-fugitive
 tpope/vim-sensible
 tpope/vim-surround
-zxqfl/tabnine-vim
 EOF
 )
 
-aesthetic_repos=$( <<EOF
+aesthetic_repos=$(cat <<EOF
 fenetikm/falcon
 morhetz/gruvbox
 rakr/vim-one
@@ -50,7 +49,7 @@ function install_package() {
   echo "- Installing vim plugin: ${1}"
   repo=$(echo "${1}" | cut -d '/' -f 2)
   if [ ! -d "${repo}" ]; then
-    git clone git@github.com:${1} || echo "- vim plugin already exists: ${1}"
+    git clone --depth 1 git@github.com:${1} || echo "- vim plugin already exists: ${1}"
   else
     echo "-- Plugin already installed: ${1}, skipping"
   fi
@@ -64,11 +63,19 @@ function install_core_packages() {
   echo "- Installed all core vim plugins"
 }
 
+function install_aesthetic_packages() {
+  echo "- Installing aesthetic vim plugins"
+  cd $HOME/.vim/bundle
+  echo "${aesthetic_repos}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_package
+  echo "- Installed all aesthetic vim plugins"
+}
+
 # Don't run if we're just sourcing the file
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
   echo "- Sourced vim plugin functions"
 else
   install_pathogen
   install_core_packages
+  install_aesthetic_packages
 fi
 
