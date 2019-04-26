@@ -3,17 +3,14 @@
 set -euo pipefail
 
 core_repos=$(cat <<EOF
-AndrewRadev/splitjoin.vim.git
+AndrewRadev/splitjoin.vim
 airblade/vim-gitgutter
 ctrlpvim/ctrlp.vim
 dyng/ctrlsf.vim.git
-ervandew/supertab
-godlygeek/tabular
-honza/vim-snippets
+lifepillar/vim-mucomplete
 mechatroner/rainbow_csv
 ngmy/vim-rubocop
 ntpeters/vim-better-whitespace
-thinca/vim-quickrun
 tpope/vim-fugitive
 tpope/vim-sensible
 tpope/vim-surround
@@ -28,7 +25,6 @@ ryanoasis/vim-devicons
 scrooloose/nerdtree
 scrooloose/syntastic
 tiagofumo/vim-nerdtree-syntax-highlight
-tyrannicaltoucan/vim-quantum.git
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
 EOF
