@@ -6,7 +6,7 @@ core_repos=$(cat <<EOF
 AndrewRadev/splitjoin.vim
 airblade/vim-gitgutter
 ctrlpvim/ctrlp.vim
-dyng/ctrlsf.vim.git
+dyng/ctrlsf.vim
 lifepillar/vim-mucomplete
 mechatroner/rainbow_csv
 ngmy/vim-rubocop
@@ -33,8 +33,11 @@ N_CONCURRENT_DOWNLOADS=8
 
 function install_pathogen() {
   echo "- Installing Pathogen (plugin/package manager)"
+
+  [ ! -f $HOME/.vim/bundle ] && mkdir -p $HOME/.vim/bundle
+
   if [ ! -f $HOME/.vim/autoload/pathogen.vim ]; then
-    mkdir -p $HOME/.vim/autoload $HOME/.vim/bundle
+    mkdir -p $HOME/.vim/autoload
     curl -LSso $HOME/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
   else
     echo "-- Pathogen already installed, skipping"
@@ -52,18 +55,11 @@ function install_package() {
 }
 export -f install_package
 
-function install_core_packages() {
-  echo "- Installing core vim plugins"
+function install_packages() {
+  echo "- Installing ${!1}"
   cd $HOME/.vim/bundle
-  echo "${core_repos}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_package
-  echo "- Installed all core vim plugins"
-}
-
-function install_aesthetic_packages() {
-  echo "- Installing aesthetic vim plugins"
-  cd $HOME/.vim/bundle
-  echo "${aesthetic_repos}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_package
-  echo "- Installed all aesthetic vim plugins"
+  echo "${!1}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_package
+  echo "- Installed ${!1}"
 }
 
 # Don't run if we're just sourcing the file
@@ -71,7 +67,7 @@ if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
   echo "- Sourced vim plugin functions"
 else
   install_pathogen
-  install_core_packages
-  install_aesthetic_packages
+  install_packages "core_repos"
+  install_packages "aesthetic_repos"
 fi
 

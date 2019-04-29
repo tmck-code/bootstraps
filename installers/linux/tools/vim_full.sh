@@ -12,7 +12,8 @@ current_version="$(apt show -a vim)"
 function install_packages() {
   echo "- Installing packages"
   install_pathogen
-  install_core_packages
+  install_packages "core_repos"
+  install_packages "aesthetic_repos"
 }
 
 if [ -f /usr/local/bin/vim ]; then

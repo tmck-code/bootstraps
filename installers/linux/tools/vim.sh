@@ -13,7 +13,8 @@ sudo apt-get install -y vim
 
 # Install vim packages
 install_pathogen
-install_core_packages
+install_packages "core_repos"
+install_packages "aesthetic_repos"
 
 chown -R $USER:$USER $HOME/.vim/
 
