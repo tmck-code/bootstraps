@@ -8,6 +8,9 @@ A home for all my linux bootstrapping scripts, somewhat mirrors the contents of 
 ### Pull repo via ssh
 
 ```bash
+ssh-keygen -t ed25519
+cat ~/.ssh/id_ed25519.pub
+
 sudo apt update && \
   sudo apt install -y git && \
   git clone git@github.com:tmck-code/bootstraps.git && \
