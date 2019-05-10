@@ -20,6 +20,8 @@ EOF
 aesthetic_repos=$(cat <<EOF
 fenetikm/falcon
 morhetz/gruvbox
+mxw/vim-jsx.git
+pangloss/vim-javascript
 rakr/vim-one
 ryanoasis/vim-devicons
 scrooloose/nerdtree
