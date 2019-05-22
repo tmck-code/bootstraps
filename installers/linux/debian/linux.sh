@@ -11,7 +11,7 @@ echo '> Installing basic dependencies'
 sudo apt install -y \
     curl tmux parallel \
     cowsay fortune \
-    docker git checkinstall locales \
+    git locales \
     bc htop bmon iotop sysstat net-tools
 
 if [ ! -f $HOME/bin/pokemonsay ]; then

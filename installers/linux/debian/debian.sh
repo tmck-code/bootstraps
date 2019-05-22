@@ -34,7 +34,7 @@ function install_packages() {
     wget curl git \
     tmux htop iotop bmon nethogs \
     cowsay fortune \
-    checkinstall locales build-essential yasm \
+    locales build-essential yasm \
     redshift
 
   # Clean up
@@ -59,5 +59,6 @@ case ${1} in
   "firefox" )  install_firefox ;;
   "wifi" )     wifi ;;
   "run" )      run ;;
+  *)           run ;;
 esac
 
