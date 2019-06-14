@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -12,15 +13,15 @@ import (
 )
 
 var (
-	installDebian   = flag.Bool("debian",   false, "install base debian dependencies")
-	installDotfiles = flag.Bool("dotfiles", false, "deploy dotfiles from repo")
-	installGolang   = flag.Bool("golang",   false, "install latest golang")
-	installLinux    = flag.Bool("linux",    false, "install base linux dependencies")
-	installOsx      = flag.Bool("osx",      false, "install base OSX dependencies")
-	installPython   = flag.Bool("python",   false, "install latest python")
-	installRuby     = flag.Bool("ruby",     false, "install latest ruby")
-	installUbuntu   = flag.Bool("ubuntu",   false, "install base ubuntu dependencies")
-	installVim      = flag.Bool("vim",      false, "install latest vim")
+	installDebian   = flag.Bool("debian", false, "install base debian dependencies")
+	installDotfiles = flag.Bool("dotfiles", false, "deploy linux dotfiles from repo")
+	installGolang   = flag.Bool("golang", false, "install latest golang")
+	installLinux    = flag.Bool("linux", false, "install base linux dependencies")
+	installOsx      = flag.Bool("osx", false, "install base OSX dependencies")
+	installPython   = flag.Bool("python", false, "install latest python")
+	installRuby     = flag.Bool("ruby", false, "install latest ruby")
+	installUbuntu   = flag.Bool("ubuntu", false, "install base ubuntu dependencies")
+	installVim      = flag.Bool("vim", false, "install latest vim")
 	installVimFull  = flag.Bool("vim_full", false, "install latest vim compiled from source")
 	taskTypes       = map[string]string{
 		"debian":   "os",
@@ -76,11 +77,14 @@ func runTask(task string) {
 	if err != nil {
 		fmt.Println("script for task does not exist:", task, installScripts[task], binary)
 		log.Fatal(err)
+	} else {
+		fmt.Println("Found script for task:", task, installScripts[task], binary)
+
 	}
 
 	fmt.Printf("\n- executing task %-10s -> %-s\n\n", task, binary)
 
-	cmd := exec.Command(binary)
+	cmd := exec.Command("/bin/sh", binary)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
@@ -104,8 +108,7 @@ func tasksForStage(tasks []string, stage string) []string {
 
 func binaryPath(localPath string) (string, error) {
 	if _, err := os.Stat(localPath); os.IsNotExist(err) {
-		return "", err
+		return "", errors.New(fmt.Sprintf("File does not exist: %s", localPath))
 	}
 	return filepath.Abs(localPath)
 }
-

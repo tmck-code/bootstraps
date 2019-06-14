@@ -1,13 +1,15 @@
 #!/bin/bash
 
+echo "yay"
+
 set -euxo pipefail
 
 if [ -z "${1:-}" ]; then
-  echo "Must provide an OS as \$1"
-  exit 1
+  echo "Defaulting OS to linux"
+  OS=linux
+else
+  OS="${1}"
 fi
-
-OS="${1}"
 
 mkdir -p ~/dev && cd ~/dev
 
