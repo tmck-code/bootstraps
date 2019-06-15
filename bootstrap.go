@@ -79,7 +79,6 @@ func runTask(task string) {
 		log.Fatal(err)
 	} else {
 		fmt.Println("-- Found script for task:", task, installScripts[task], binary)
-
 	}
 
 	fmt.Printf("-- executing task %-10s -> %-s\n", task, binary)
