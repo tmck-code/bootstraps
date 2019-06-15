@@ -1,8 +1,6 @@
 #!/bin/bash
 
-echo "yay"
-
-set -euxo pipefail
+set -euo pipefail
 
 if [ -z "${1:-}" ]; then
   echo "Defaulting OS to linux"
