@@ -62,10 +62,10 @@ func main() {
 	}
 	flag.VisitAll(visitor)
 
-	fmt.Printf("tasks to run %v\n", tasks)
+	fmt.Printf("-- tasks to run %v\n", tasks)
 	for i, stage := range installOrder {
 		stageTasks := tasksForStage(tasks, stage)
-		fmt.Printf("\ntasks for stage %d %-5s : %-s\n", i, stage, stageTasks)
+		fmt.Printf(" - tasks for stage %d %-5s : %-s\n", i, stage, stageTasks)
 		for _, task := range stageTasks {
 			runTask(task)
 		}
@@ -75,14 +75,14 @@ func main() {
 func runTask(task string) {
 	binary, err := binaryPath(path.Join(dirPath, installScripts[task]))
 	if err != nil {
-		fmt.Println("script for task does not exist:", task, installScripts[task], binary)
+		fmt.Println("-- Script for task does not exist:", task, installScripts[task], binary)
 		log.Fatal(err)
 	} else {
-		fmt.Println("Found script for task:", task, installScripts[task], binary)
+		fmt.Println("-- Found script for task:", task, installScripts[task], binary)
 
 	}
 
-	fmt.Printf("\n- executing task %-10s -> %-s\n\n", task, binary)
+	fmt.Printf("-- executing task %-10s -> %-s\n", task, binary)
 
 	cmd := exec.Command("/bin/bash", binary)
 	cmd.Stdout = os.Stdout
@@ -93,7 +93,7 @@ func runTask(task string) {
 	if execErr != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("finished executing task", task)
+	fmt.Println("-- finished executing task", task)
 }
 
 func tasksForStage(tasks []string, stage string) []string {
