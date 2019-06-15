@@ -85,8 +85,7 @@ func runTask(task string) {
 	fmt.Printf("-- executing task %-10s -> %-s\n", task, binary)
 
 	cmd := exec.Command("/bin/bash", binary)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	cmd.Stdout, cmd.Stderr = os.Stdout, os.Stderr
 
 	execErr := cmd.Run()
 
