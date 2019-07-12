@@ -12,12 +12,14 @@ mechatroner/rainbow_csv
 ngmy/vim-rubocop
 ntpeters/vim-better-whitespace
 tpope/vim-fugitive
+chrisbra/csv.vim
 tpope/vim-sensible
 tpope/vim-surround
 EOF
 )
 
 aesthetic_repos=$(cat <<EOF
+ekalinin/Dockerfile.vim
 fenetikm/falcon
 morhetz/gruvbox
 mxw/vim-jsx.git
