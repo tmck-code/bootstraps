@@ -1,15 +1,17 @@
 #!/bin/bash
 
-set -euxo pipefail
+# set -euxo pipefail
 
 function pkg_deps() {
-  sudo apt update -qq && sudo apt -y install \
+  sudo apt update
+  sudo apt -y install \
     autoconf \
     automake \
     build-essential \
     cmake \
     git-core \
     libass-dev \
+    libbluray-dev \
     libfreetype6-dev \
     libsdl2-dev \
     libtool \
@@ -74,6 +76,23 @@ function x265() {
   make -j 4 install
 }
 
+function libbluray() {
+  sudo apt-get install -y --no-install-recommends libxml2-dev ant
+  cd ~/ffmpeg_sources
+
+  if [ -d libbluray ]; then
+    (cd libbluray && git pull && make uninstall && make clean)
+  else
+    git clone https://code.videolan.org/videolan/libbluray.git
+    git submodule update --init
+    autoreconf -fiv
+  fi
+
+  PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --disable-shared --enable-static --disable-examples --disable-bdjava-jar --disable-doxygen-doc --disable-doxygen-dot --without-fontconfig --without-freetype
+  PATH="$HOME/bin:$PATH" make -j 4
+  make -j 4 install
+}
+
 function others() {
   sudo apt install -y \
     libvpx-dev \
@@ -89,10 +108,11 @@ function ffmpeg() {
   wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
   tar xjvf ffmpeg-snapshot.tar.bz2
   cd ffmpeg
+  make clean
   PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
     --prefix="$HOME/ffmpeg_build" \
     --pkg-config-flags="--static" \
-    --extra-cflags="-I$HOME/ffmpeg_build/include" \
+    --extra-cflags="-I$HOME/ffmpeg_build/include -I/usr/include" \
     --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
     --extra-libs="-lpthread -lm" \
     --bindir="$HOME/bin" \
@@ -104,8 +124,9 @@ function ffmpeg() {
     --enable-libvorbis \
     --enable-libx264 \
     --enable-libx265 \
-    --enable-nonfree
-  PATH="$HOME/bin:$PATH" make
+    --enable-nonfree \
+    --enable-libbluray
+  make
   make -j 4 install
   hash -r
 }
@@ -116,7 +137,7 @@ function remove_compilations() {
 
 function purge() {
   rm -rf ~/ffmpeg_build ~/ffmpeg_sources ~/bin/{ffmpeg,ffprobe,ffplay,x264,x265,nasm,vsyasm,yasm,ytasm}
-  sed -i '/ffmpeg_build/d' ~/.manpath
+  # sed -i '/ffmpeg_build/d' ~/.manpath
   hash -r
 }
 
@@ -128,14 +149,14 @@ function install() {
   x264
   x265
   others
+  libbluray
   ffmpeg
 }
 
 function update() {
   remove_compilations
+  pkg_deps
   install
 }
 
-# purge
-install
-ffmpeg
+update
