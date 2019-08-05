@@ -33,11 +33,11 @@ function younger_than_a_week() {
 
 function nasm() {
   cd ~/ffmpeg_sources
-  # if younger_than_a_week nasm-2.13.03; then return;  fi
+  # if younger_than_a_week nasm-2.14.02; then return;  fi
 
-  wget https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.bz2
-  tar xjvf nasm-2.13.03.tar.bz2
-  cd nasm-2.13.03
+  wget https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.bz2
+  tar xjvf nasm-2.14.02.tar.bz2
+  cd nasm-2.14.02
   ./autogen.sh
   PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
   make -j 4
@@ -68,7 +68,7 @@ function x265() {
   if [ -d x265 ]; then
     (cd x265 && hg pull && hg update)
   else
-    hg clone https://bitbucket.org/multicoreware/x265
+    hg clone --config ui.clonebundles=false https://bitbucket.org/multicoreware/x265
   fi
   cd x265/build/linux
   PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED=off ../../source
@@ -84,6 +84,7 @@ function libbluray() {
     (cd libbluray && git pull && make uninstall && make clean)
   else
     git clone https://code.videolan.org/videolan/libbluray.git
+    cd libbluray
     git submodule update --init
     autoreconf -fiv
   fi
@@ -108,7 +109,7 @@ function ffmpeg() {
   wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
   tar xjvf ffmpeg-snapshot.tar.bz2
   cd ffmpeg
-  make clean
+  # make clean
   PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
     --prefix="$HOME/ffmpeg_build" \
     --pkg-config-flags="--static" \
