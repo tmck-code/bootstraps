@@ -35,7 +35,8 @@ function install_packages() {
     tmux htop iotop bmon nethogs \
     cowsay fortune \
     locales build-essential yasm \
-    redshift
+    redshift \
+    software-properties-common
 
   # Clean up
   sudo apt-get autoremove -y
@@ -53,7 +54,7 @@ function run() {
   install_icons
 }
 
-case ${1} in
+case ${1:-} in
   "packages" ) install_packages ;;
   "icons" )    install_icons ;;
   "firefox" )  install_firefox ;;
