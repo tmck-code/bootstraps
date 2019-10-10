@@ -20,7 +20,8 @@ function install_essentials() {
   echo "- Installing essential tools"
   pkg install -y \
     git tig vim man \
-    htop tmux bmon
+    htop tmux bmon \
+    termux-api termux-tools
 }
 
 # Install minimum dependencies for dotfiles and bootstrapping to work
