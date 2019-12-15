@@ -33,12 +33,19 @@ brew install findutils --with-default-names
 brew install gnu-sed --with-default-names
 brew install grep --with-default-names
 
-cd $HOME
 if [ ! -f $HOME/bin/pokemonsay ]; then
   echo "- Installing pokemonsay"
-  git clone http://github.com/possatti/pokemonsay
+  cd /usr/local/src
+  git clone --depth 1 http://github.com/possatti/pokemonsay
   (cd pokemonsay && ./install.sh)
 else
   echo "- Pokemonsay already installed, skipping"
 fi
 
+if [ ! -f $HOME/bin/lolcat ]; then
+  echo "- Installing lolcat"
+  cd /usr/local/src
+  # Install the "high-performance" lolcat
+  git clone --depth 1 https://github.com/jaseg/lolcat.git
+  (cd lolcat && make lolcat && cp ./lolcat $HOME/bin/)
+fi
