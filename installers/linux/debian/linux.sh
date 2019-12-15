@@ -19,3 +19,9 @@ if [ ! -f $HOME/bin/pokemonsay ]; then
     (cd pokemonsay && ./install.sh)
 fi
 
+if [ ! -f $HOME/bin/lolcat ]; then
+  cd /usr/local/src
+  # Install the "high-performance" lolcat
+  git clone --depth 1 https://github.com/jaseg/lolcat.git
+  (cd lolcat && make lolcat && cp ./lolcat $HOME/bin/)
+fi
