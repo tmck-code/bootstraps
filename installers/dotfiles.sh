@@ -14,7 +14,11 @@ mkdir -p ~/dev && cd ~/dev
 if [ -d dotfiles ]; then
   (cd dotfiles && git pull)
 else
-  git clone git@github.com:tmck-code/dotfiles.git
+  if [ -f ~/.ssh/id_ed25519.pub ]; then
+    git clone git@github.com:tmck-code/dotfiles
+  else
+    git clone https://github.com/tmck-code/dotfiles
+  fi
 fi
 
 (cd dotfiles && ./deploy.sh "${OS}")
