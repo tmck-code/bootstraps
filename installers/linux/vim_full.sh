@@ -2,19 +2,11 @@
 
 set -euxo pipefail
 
-. ${0%/*}/vim_plugins.sh
 
 LOCAL_DIR=$(pwd)
 WEEK=604800
 
 current_version="$(apt show -a vim)"
-
-function install_packages() {
-  echo "- Installing packages"
-  install_pathogen
-  install_packages "core_repos"
-  install_packages "aesthetic_repos"
-}
 
 if [ -f /usr/local/bin/vim ]; then
   current_version_date=$(stat -c %Y /usr/local/bin/vim)
@@ -24,7 +16,7 @@ if [ -f /usr/local/bin/vim ]; then
     days_since_update="$(( $todays_date - $current_version_date ))"
     if [ $days_since_update -lt $WEEK ]; then
       echo "Installed version is recent enough, skipping compilation"
-      install_packages
+      ./${0%/*}/vim_plugins.sh
       exit 0
     fi
   fi
@@ -34,7 +26,7 @@ sudo apt purge -y vim vim-common vim-runtime
 
 sudo apt install -y \
     libncurses5-dev \
-    libgtk2.0-dev libatk1.0-dev libbonoboui2-dev libcairo2-dev libx11-dev \
+    libgtk2.0-dev libatk1.0-dev libcairo2-dev libx11-dev \
     libxpm-dev libxt-dev \
     checkinstall \
     libperl-dev \
@@ -68,7 +60,7 @@ sudo make install
 
 sudo ln -s /usr/local/bin/vim /usr/bin/vim
 
-install_packages
+./${0%/*}/vim_plugins.sh
 
 chown -R $USER:$USER $HOME/.vim/
 
