@@ -60,7 +60,7 @@ sudo make install
 
 sudo ln -s /usr/local/bin/vim /usr/bin/vim
 
-./${0%/*}/vim_plugins.sh
+${0%/*}/vim_plugins.sh
 
 chown -R $USER:$USER $HOME/.vim/
 
