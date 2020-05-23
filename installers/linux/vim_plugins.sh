@@ -29,7 +29,8 @@ scrooloose/syntastic
 tiagofumo/vim-nerdtree-syntax-highlight
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
-ftsamoyed/PinkCatBoo"
+ftsamoyed/PinkCatBoo
+ntk148v/vim-horizon"
 
 N_CONCURRENT_DOWNLOADS=8
 
