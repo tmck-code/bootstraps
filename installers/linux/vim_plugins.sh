@@ -30,7 +30,8 @@ tiagofumo/vim-nerdtree-syntax-highlight
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
 ftsamoyed/PinkCatBoo
-ntk148v/vim-horizon"
+ntk148v/vim-horizon
+Rigellute/shades-of-purple.vim"
 
 N_CONCURRENT_DOWNLOADS=8
 
