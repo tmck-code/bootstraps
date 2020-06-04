@@ -11,7 +11,6 @@ function pkg_deps() {
     cmake \
     git-core \
     libass-dev \
-    libbluray-dev \
     libfreetype6-dev \
     libsdl2-dev \
     libtool \
@@ -105,7 +104,7 @@ function ffmpeg() {
   mkdir -p ~/ffmpeg_sources ~/bin
   cd ~/ffmpeg_sources
   # if younger_than_a_week ffmpeg; then return; fi
-    
+
   wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
   tar xjvf ffmpeg-snapshot.tar.bz2
   cd ffmpeg
@@ -125,8 +124,7 @@ function ffmpeg() {
     --enable-libvorbis \
     --enable-libx264 \
     --enable-libx265 \
-    --enable-nonfree \
-    --enable-libbluray
+    --enable-nonfree
   make
   make -j 4 install
   hash -r
@@ -150,7 +148,6 @@ function install() {
   x264
   x265
   others
-  libbluray
   ffmpeg
 }
 
