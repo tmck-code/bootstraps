@@ -52,7 +52,7 @@ function x264() {
   cd ~/ffmpeg_sources
   # if younger_than_a_week x264; then return;  fi
 
-  git -C x264 pull 2> /dev/null || git clone --depth 1 https://git.videolan.org/git/x264
+  git -C x264 pull 2> /dev/null || git clone --depth 1 https://code.videolan.org/videolan/x264.git
   cd x264
   PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static --enable-pic
   PATH="$HOME/bin:$PATH" make -j 4
