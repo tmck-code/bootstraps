@@ -41,7 +41,7 @@ function install_base() {
 # - "high-performance" lolcat
 function install_pokesay() {
   echo "> Installing pokesay tools for .bashrc"
-  cd /usr/local/src
+  cd /tmp
 
   sudo apt-get update
   sudo apt-get install -y cowsay fortune
@@ -55,6 +55,8 @@ function install_pokesay() {
     git clone --depth 1 https://github.com/jaseg/lolcat.git
     (cd lolcat && make lolcat && cp ./lolcat $HOME/bin/)
   fi
+
+  rm -rf /tmp/pokesay /tmp/lolcat
 }
 
 function bootstrap() {
