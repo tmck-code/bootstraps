@@ -14,7 +14,10 @@ ngmy/vim-rubocop
 ntpeters/vim-better-whitespace
 tpope/vim-fugitive
 tpope/vim-sensible
-tpope/vim-surround"
+tpope/vim-surround
+davidhalter/jedi-vim
+EOF
+)
 
 export aesthetic_repos="\
 ekalinin/Dockerfile.vim
@@ -37,7 +40,7 @@ vim-airline/vim-airline-themes"
 N_CONCURRENT_DOWNLOADS=8
 
 function install_pathogen() {
-  echo "- Installing Pathogen (plugin/package manager)"
+  echo "- Installing Pathogen (plugin/plugin manager)"
 
   [ ! -f "${HOME}/.vim/bundle" ] && mkdir -p "${HOME}/.vim/bundle"
 
@@ -49,7 +52,7 @@ function install_pathogen() {
   fi
 }
 
-function install_package() {
+function install_plugin() {
   echo "- Installing vim plugin: ${1}"
   repo=$(echo "${1}" | cut -d '/' -f 2)
   if [ ! -d "${repo}" ]; then
@@ -58,21 +61,27 @@ function install_package() {
     echo "-- Plugin already installed: ${1}, skipping"
   fi
 }
-export -f install_package
+export -f install_plugin
 
-function install_packages() {
+function install_plugin_category() {
   echo "- Installing ${!1}"
-  cd "${HOME}"/.vim/bundle
-  echo "${!1}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_package
+  cd "${HOME}/.vim/bundle"
+  echo "${!1}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_plugin
   echo "- Installed ${!1}"
 }
+
+function install_all_plugins() {
+  echo "- Installing all plugins"
+  install_pathogen
+  install_plugin_category "core_repos"
+  install_plugin_category "aesthetic_repos"
+}
+export -f install_all_plugins
 
 # Don't run if we're just sourcing the file
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
   echo "- Sourced vim plugin functions"
 else
-  install_pathogen
-  install_packages "core_repos"
-  install_packages "aesthetic_repos"
+  install_all_plugins
 fi
 

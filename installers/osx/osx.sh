@@ -5,6 +5,8 @@ set -uxo pipefail
 cd $HOME
 
 if [ -f $HOME/.ssh/id_ed25519.pub ]; then
+  echo "- SSH public key already exists, skipping"
+else
   echo "- Generating a new ssh public key for GitHub"
   ssh-keygen -t ed25519
   cat ~/.ssh/id_ed25519.pub
@@ -20,17 +22,11 @@ fi
 
 brew update
 
-# Install the essentials
-brew install \
-  tmux fortune cowsay htop bmon tig parallel gnupg2
-
+# Install the essential GNU utilities
 brew reinstall openssl
-# Core GNU file/shell/text utilities
-brew install coreutils diffutils gnutls gzip watch wget
-# GNU find, xargs & locate
-brew install findutils --with-default-names
-brew install gnu-sed --with-default-names
-brew install grep --with-default-names
+brew install \
+  tmux fortune cowsay htop bmon tig parallel gnupg2 \
+  coreutils diffutils gnutls gzip watch wget findutils gnu-sed grep
 
 export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
 

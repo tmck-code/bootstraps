@@ -35,7 +35,7 @@ sudo apt install -y \
 # Download & install vim8 ---------------------------------
 
 echo '> Cloning vim8 from git'
-sudo chown -R $USER:$USER /usr/local/src
+sudo chown -R "$USER:$USER"/usr/local/src
 cd /usr/local/src
 if [ -d vim ]; then
     cd vim ; git pull ; cd ../
@@ -45,22 +45,26 @@ fi
 
 echo '> Configure vim8'
 cd ./vim
-./configure \
-    --with-features=huge \
-    --enable-python3interp \
-    --enable-gui=no \
-    --without-x \
+LD_FLAGS="-Wl,-rpath=${HOME}/.pyenv/versions/3.4.0/lib" \
+  ./configure \
     --enable-cscope \
+    --enable-fail-if-missing \
+    --enable-fontset \
+    --enable-gui=no \
     --enable-largefile \
     --enable-multibyte \
-    --enable-fail-if-missing
+    --enable-python3interp=dynamic \
+    --enable-tclinterp \
+    --with-features=huge
 
-make
-sudo make install
+
+n_proc=$(nproc --all)
+make -j "${n_proc}"
+sudo make -j "${n_proc}" install
 
 sudo ln -s /usr/local/bin/vim /usr/bin/vim
 
 ${0%/*}/vim_plugins.sh
 
-chown -R $USER:$USER $HOME/.vim/
+chown -R "${USER}:${USER}" "${HOME}/.vim/"
 
