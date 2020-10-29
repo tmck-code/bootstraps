@@ -37,7 +37,7 @@ tiagofumo/vim-nerdtree-syntax-highlight
 vim-airline/vim-airline
 vim-airline/vim-airline-themes"
 
-N_CONCURRENT_DOWNLOADS=8
+N_CONCURRENT_DOWNLOADS=2
 
 function install_pathogen() {
   echo "- Installing Pathogen (plugin/plugin manager)"
@@ -64,10 +64,8 @@ function install_plugin() {
 export -f install_plugin
 
 function install_plugin_category() {
-  echo "- Installing ${!1}"
   cd "${HOME}/.vim/bundle"
   echo "${!1}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_plugin
-  echo "- Installed ${!1}"
 }
 
 function install_all_plugins() {
