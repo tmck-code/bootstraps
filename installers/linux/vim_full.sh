@@ -28,7 +28,6 @@ sudo apt install -y \
     libncurses5-dev \
     libgtk2.0-dev libatk1.0-dev libcairo2-dev libx11-dev \
     libxpm-dev libxt-dev \
-    checkinstall \
     libperl-dev \
     python3-dev
 
