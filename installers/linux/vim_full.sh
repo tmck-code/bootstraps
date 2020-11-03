@@ -53,9 +53,7 @@ LD_FLAGS="-Wl,-rpath=${HOME}/.pyenv/versions/3.4.0/lib" \
     --enable-largefile \
     --enable-multibyte \
     --enable-python3interp=dynamic \
-    --enable-tclinterp \
     --with-features=huge
-
 
 n_proc=$(nproc --all)
 make -j "${n_proc}"

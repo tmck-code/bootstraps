@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-# Remove the largest, least-used programs. Saves a lot of time when running 
+# Remove the largest, least-used programs. Saves a lot of time when running
 # `apt-get upgrade` for the first time
 function purge_bloat() {
   echo "> Purging largest programs that aren't often used"
@@ -63,10 +63,16 @@ function install_vscode() {
   curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
   sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft-archive-keyring.gpg
   sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
- 
+
   sudo apt install -y apt-transport-https
   sudo apt update
   sudo apt install code # or code-insiders
+}
+
+function install_chrome() {
+  cd /tmp/
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  sudo apt install -y ./google-chrome-stable_current_amd64.deb
 }
 
 function bootstrap() {
@@ -74,6 +80,8 @@ function bootstrap() {
   clean_slate
   install_base
   install_pokesay
+  install_vscode
+  install_chrome
   echo "> Bootstrap complete!"
 }
 
@@ -82,6 +90,7 @@ case ${1:-} in
   "base" )        install_base ;;
   "pokesay" )     install_pokesay ;;
   "vscode" )      install_vscode ;;
+  "chrome" )      install_chrome ;;
   "clean_slate" ) clean_slate ;;
   "bootstrap"|* )   bootstrap ;;
 esac
