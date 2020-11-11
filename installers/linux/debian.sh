@@ -75,6 +75,28 @@ function install_chrome() {
   sudo apt install -y ./google-chrome-stable_current_amd64.deb
 }
 
+function install_ergodox() {
+  sudo apt install -y gtk+3.0 libwebkit2gtk-4.0 libusb-dev
+  local config=$(cat <<EOF
+# Teensy rules for the Ergodox EZ
+ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", ENV{ID_MM_DEVICE_IGNORE}="1"
+ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789A]?", ENV{MTP_NO_PROBE}="1"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789ABCD]?", MODE:="0666"
+KERNEL=="ttyACM*", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", MODE:="0666"
+
+# STM32 rules for the Moonlander and Planck EZ
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", \
+    MODE:="0666", \
+    SYMLINK+="stm32_dfu"
+EOF
+)
+  echo "${config}" | sudo tee /etc/udev/rules.d/50-wally.rules
+  cd /tmp/
+  wget https://configure.ergodox-ez.com/wally/linux -O wally
+  chmod +x wally
+  mv wally $HOME/bin
+}
+
 function bootstrap() {
   echo "> Bootstrapping debian"
   clean_slate
@@ -82,6 +104,7 @@ function bootstrap() {
   install_pokesay
   install_vscode
   install_chrome
+  install_ergodox
   echo "> Bootstrap complete!"
 }
 
@@ -91,6 +114,7 @@ case ${1:-} in
   "pokesay" )     install_pokesay ;;
   "vscode" )      install_vscode ;;
   "chrome" )      install_chrome ;;
+  "ergodox" )     install_ergodox ;;
   "clean_slate" ) clean_slate ;;
   "bootstrap"|* )   bootstrap ;;
 esac
