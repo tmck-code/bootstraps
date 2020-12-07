@@ -29,10 +29,7 @@ function install_base() {
     tmux htop iotop bmon sysstat \
     parallel \
     cowsay fortune \
-    locales build-essential yasm \
-    brasero \
-    redshift \
-    software-properties-common
+    locales build-essential yasm
 }
 
 
