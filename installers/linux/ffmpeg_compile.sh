@@ -123,8 +123,8 @@ function ffmpeg() {
     --enable-libopus \
     --enable-libvorbis \
     --enable-libx264 \
-    --enable-libx265 \
     --enable-nonfree
+    # --enable-libx265 \
   make
   make -j 4 install
   hash -r
@@ -146,7 +146,7 @@ function install() {
   nasm
   yasm
   x264
-  x265
+  # x265
   others
   ffmpeg
 }

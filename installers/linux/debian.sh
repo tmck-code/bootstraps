@@ -72,6 +72,13 @@ function install_chrome() {
   sudo apt install -y ./google-chrome-stable_current_amd64.deb
 }
 
+function install_opera() {
+  sudo sh -c 'echo "deb http://deb.opera.com/opera-stable/ stable non-free" > /etc/apt/sources.list.d/opera.list'
+  wget -O - https://deb.opera.com/archive.key | sudo apt-key add -
+  sudo apt update
+  sudo apt install -y opera-stable
+}
+
 function install_ergodox() {
   sudo apt install -y gtk+3.0 libwebkit2gtk-4.0 libusb-dev
   local config=$(cat <<EOF
@@ -111,6 +118,7 @@ case ${1:-} in
   "pokesay" )     install_pokesay ;;
   "vscode" )      install_vscode ;;
   "chrome" )      install_chrome ;;
+  "opera" )       install_opera ;;
   "ergodox" )     install_ergodox ;;
   "clean_slate" ) clean_slate ;;
   "bootstrap"|* )   bootstrap ;;
