@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# set -euxo pipefail
+set -euxo pipefail
 
 function pkg_deps() {
   sudo apt update
@@ -39,13 +39,29 @@ function nasm() {
   cd nasm-2.14.02
   ./autogen.sh
   PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
-  make -j 4
-  make -j 4 install
+  make -j "$(nproc)"
+  make -j "$(nproc)" install
 }
 
 function yasm() {
   # need >= 1.2, debian provides 1.3 as of 2018/07/26
   sudo apt install -y yasm
+}
+
+function nv_deps() {
+  # NV headers
+  cd ~/ffmpeg_sources
+  git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
+  cd nv-codec-headers
+  sudo make -j "$(nproc)" install
+
+  # CUDA
+  wget https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda-repo-debian10-11-2-local_11.2.0-460.27.04-1_amd64.deb
+  sudo dpkg -i cuda-repo-debian10-11-2-local_11.2.0-460.27.04-1_amd64.deb
+  sudo apt-key add /var/cuda-repo-debian10-11-2-local/7fa2af80.pub
+  sudo add-apt-repository contrib
+  sudo apt-get update
+  sudo apt-get -y install cuda
 }
 
 function x264() {
@@ -54,25 +70,24 @@ function x264() {
 
   git -C x264 pull 2> /dev/null || git clone --depth 1 https://code.videolan.org/videolan/x264.git
   cd x264
-  PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static --enable-pic
-  PATH="$HOME/bin:$PATH" make -j 4
-  make -j 4 install
+  PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
+    --prefix="$HOME/ffmpeg_build" \
+    --bindir="$HOME/bin" \
+    --enable-static \
+    --enable-pic
+  PATH="$HOME/bin:$PATH" make -j "$(nproc)"
+  make -j "$(nproc)" install
 }
 
 function x265() {
-  sudo apt install -y mercurial libnuma-dev
+  sudo apt-get install libnuma-dev
   cd ~/ffmpeg_sources
+  git -C x265_git pull 2> /dev/null || git clone https://bitbucket.org/multicoreware/x265_git
   # if younger_than_a_week x265; then return;  fi
-
-  if [ -d x265 ]; then
-    (cd x265 && hg pull && hg update)
-  else
-    hg clone --config ui.clonebundles=false https://bitbucket.org/multicoreware/x265
-  fi
-  cd x265/build/linux
+  cd x265_git/build/linux
   PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED=off ../../source
-  PATH="$HOME/bin:$PATH" make -j 4
-  make -j 4 install
+  PATH="$HOME/bin:$PATH" make -j "$(nproc)"
+  make -j "$(nproc)" install
 }
 
 function libbluray() {
@@ -89,8 +104,8 @@ function libbluray() {
   fi
 
   PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --disable-shared --enable-static --disable-examples --disable-bdjava-jar --disable-doxygen-doc --disable-doxygen-dot --without-fontconfig --without-freetype
-  PATH="$HOME/bin:$PATH" make -j 4
-  make -j 4 install
+  PATH="$HOME/bin:$PATH" make -j "$(nproc)"
+  make -j "$(nproc)" install
 }
 
 function others() {
@@ -123,10 +138,16 @@ function ffmpeg() {
     --enable-libopus \
     --enable-libvorbis \
     --enable-libx264 \
+    --enable-libx265 \
     --enable-nonfree
-    # --enable-libx265 \
-  make
-  make -j 4 install
+# -I/usr/local/cuda/include" \
+# -L/usr/local/cuda/lib64" \
+    # --enable-nvenc \
+    # --enable-cuda \
+    # --enable-libnpp \
+    # --enable-cuvid
+  make -j "$(nproc)"
+  make -j "$(nproc)" install
   hash -r
 }
 
@@ -146,7 +167,7 @@ function install() {
   nasm
   yasm
   x264
-  # x265
+  x265
   others
   ffmpeg
 }
@@ -158,3 +179,4 @@ function update() {
 }
 
 update
+# nv_deps
