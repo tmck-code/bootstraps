@@ -14,7 +14,8 @@ ngmy/vim-rubocop
 ntpeters/vim-better-whitespace
 tpope/vim-fugitive
 tpope/vim-sensible
-tpope/vim-surround"
+tpope/vim-surround
+vim-scripts/Align"
 
 export aesthetic_repos="\
 ekalinin/Dockerfile.vim
