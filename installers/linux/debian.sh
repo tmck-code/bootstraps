@@ -101,6 +101,26 @@ EOF
   mv wally $HOME/bin
 }
 
+function install_alacritty() {
+  # grab the source code
+  cd /tmp/
+  [ -d alacritty ] && rm -rf alacritty
+  git clone https://github.com/alacritty/alacritty.git
+  # install rustup
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  source $HOME/.cargo/env
+  rustup override set stable
+  rustup update stable
+  # install .deb deps
+  sudo apt install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev python3
+  # build & install
+  cd alacritty
+  cargo build --release
+  sudo cp target/release/alacritty /usr/local/bin/
+  cd $HOME
+  rm -rf /tmp/alacritty
+}
+
 function bootstrap() {
   echo "> Bootstrapping debian"
   clean_slate
@@ -109,6 +129,7 @@ function bootstrap() {
   install_vscode
   install_chrome
   install_ergodox
+  install_alacritty
   echo "> Bootstrap complete!"
 }
 
@@ -120,6 +141,7 @@ case ${1:-} in
   "chrome" )      install_chrome ;;
   "opera" )       install_opera ;;
   "ergodox" )     install_ergodox ;;
+  "alacritty" )   install_alacritty ;;
   "clean_slate" ) clean_slate ;;
   "bootstrap"|* )   bootstrap ;;
 esac
