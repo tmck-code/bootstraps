@@ -102,21 +102,26 @@ EOF
 }
 
 function install_alacritty() {
-  # grab the source code
+  sudo apt update
+  sudo apt install -y \
+    cmake pkg-config \
+    libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev
+
+  # install rustup/cargo
+  if ! command -v rustup; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    source $HOME/.cargo/env
+    rustup override set stable
+    rustup update stable
+  fi
+  [ -d /tmp/alacritty ] && rm -rf /tmp/alacritty
+
   cd /tmp/
-  [ -d alacritty ] && rm -rf alacritty
   git clone https://github.com/alacritty/alacritty.git
-  # install rustup
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-  source $HOME/.cargo/env
-  rustup override set stable
-  rustup update stable
-  # install .deb deps
-  sudo apt install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev python3
-  # build & install
+
   cd alacritty
   cargo build --release
-  sudo cp target/release/alacritty /usr/local/bin/
+  sudo cp -v target/release/alacritty /usr/local/bin/
   cd $HOME
   rm -rf /tmp/alacritty
 }
