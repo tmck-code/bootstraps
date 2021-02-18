@@ -121,9 +121,27 @@ function install_alacritty() {
 
   cd alacritty
   cargo build --release
-  sudo cp -v target/release/alacritty /usr/local/bin/
+    sudo cp -v target/release/alacritty /usr/local/bin/
   cd $HOME
   rm -rf /tmp/alacritty
+}
+
+function install_steam() {
+  line_n=$(grep -n 'deb http://deb.debian.org/debian/ buster main$' /etc/apt/sources.list)
+  if [ ! -z "${line_n:-}" ]; then
+    sudo sed -i \
+      "${line_n}s,deb http://deb.debian.org/debian/ buster main$,deb http://deb.debian.org/debian/ buster main contrib non-free,g" \
+      /etc/apt/sources.list
+  fi
+
+  sudo dpkg --add-architecture i386
+  sudo apt update
+  sudo apt install -y \
+    steam \
+    mesa-vulkan-drivers \
+    libglx-mesa0:i386 \
+    mesa-vulkan-drivers:i386 \
+    libgl1-mesa-dri:i386
 }
 
 function install_i3() {
@@ -150,14 +168,15 @@ function bootstrap() {
 
 
 case ${1:-} in
-  "base" )        install_base ;;
-  "pokesay" )     install_pokesay ;;
-  "vscode" )      install_vscode ;;
-  "chrome" )      install_chrome ;;
-  "opera" )       install_opera ;;
-  "ergodox" )     install_ergodox ;;
   "alacritty" )   install_alacritty ;;
+  "base" )        install_base ;;
+  "chrome" )      install_chrome ;;
+  "ergodox" )     install_ergodox ;;
   "i3" )          install_i3 ;;
+  "opera" )       install_opera ;;
+  "pokesay" )     install_pokesay ;;
+  "steam" )       install_steam ;;
+  "vscode" )      install_vscode ;;
   "clean_slate" ) clean_slate ;;
   "bootstrap"|* )   bootstrap ;;
 esac
