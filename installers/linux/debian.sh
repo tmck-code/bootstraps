@@ -126,6 +126,16 @@ function install_alacritty() {
   rm -rf /tmp/alacritty
 }
 
+function install_i3() {
+  sudo apt update
+  sudo apt install -y \
+    i3 suckless-tools j4-dmenu-desktop
+  # TODO: do I really need this lighdm config option?
+  sudo sed 's/#user-session=default/user-session=i3/g' /etc/lightdm/lightdm.conf
+  echo 'exec /usr/bin/i3 -V -d all' > $HOME/.xsession
+  sudo shutdown -r now
+}
+
 function bootstrap() {
   echo "> Bootstrapping debian"
   clean_slate
@@ -147,6 +157,7 @@ case ${1:-} in
   "opera" )       install_opera ;;
   "ergodox" )     install_ergodox ;;
   "alacritty" )   install_alacritty ;;
+  "i3" )          install_i3 ;;
   "clean_slate" ) clean_slate ;;
   "bootstrap"|* )   bootstrap ;;
 esac
