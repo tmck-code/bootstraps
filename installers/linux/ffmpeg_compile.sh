@@ -3,6 +3,7 @@
 set -euxo pipefail
 
 function pkg_deps() {
+  mkdir -p ~/ffmpeg_sources ~/ffmpeg_build ~/bin
   sudo apt update
   sudo apt -y install \
     autoconf \
@@ -14,6 +15,8 @@ function pkg_deps() {
     libfreetype6-dev \
     libsdl2-dev \
     libtool \
+    libssh-dev \
+    libssl-dev \
     libva-dev \
     libvdpau-dev \
     libvorbis-dev \
@@ -50,18 +53,18 @@ function yasm() {
 
 function nv_deps() {
   # NV headers
+  mkdir -p ~/ffmpeg_sources
   cd ~/ffmpeg_sources
-  git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
+  git -C nv-codec-headers pull 2> /dev/null || git clone --depth 1 https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
   cd nv-codec-headers
-  sudo make -j "$(nproc)" install
+  make PREFIX="/home/local/ffmpeg_build" BINDDIR="/home/local/bin"
+  sudo make PREFIX="/home/local/ffmpeg_build" BINDDIR="/home/local/bin" -j "$(nproc)" install
 
   # CUDA
-  wget https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda-repo-debian10-11-2-local_11.2.0-460.27.04-1_amd64.deb
-  sudo dpkg -i cuda-repo-debian10-11-2-local_11.2.0-460.27.04-1_amd64.deb
-  sudo apt-key add /var/cuda-repo-debian10-11-2-local/7fa2af80.pub
   sudo add-apt-repository contrib
-  sudo apt-get update
-  sudo apt-get -y install cuda
+  sudo apt update
+  sudo apt purge -y cuda
+  sudo apt install -y cuda
 }
 
 function x264() {
@@ -123,13 +126,13 @@ function ffmpeg() {
   wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
   tar xjvf ffmpeg-snapshot.tar.bz2
   cd ffmpeg
-  # make clean
-  PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
+  # make distclean
+  PATH="$HOME/ffmpeg_build/bin/:$HOME/bin:/usr/local/cuda-11.3/bin/:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
     --prefix="$HOME/ffmpeg_build" \
     --pkg-config-flags="--static" \
-    --extra-cflags="-I$HOME/ffmpeg_build/include -I/usr/include" \
-    --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
-    --extra-libs="-lpthread -lm" \
+    --extra-cflags="-I$HOME/ffmpeg_build/include -I/usr/include -I/usr/local/include" \
+    --extra-ldflags="-L$HOME/ffmpeg_build/lib -L/usr/local/lib" \
+    --extra-libs="-lpthread -lm -lz" \
     --bindir="$HOME/bin" \
     --enable-gpl \
     --enable-libass \
@@ -139,13 +142,15 @@ function ffmpeg() {
     --enable-libvorbis \
     --enable-libx264 \
     --enable-libx265 \
-    --enable-nonfree
-# -I/usr/local/cuda/include" \
-# -L/usr/local/cuda/lib64" \
-    # --enable-nvenc \
-    # --enable-cuda \
-    # --enable-libnpp \
-    # --enable-cuvid
+    --enable-nonfree \
+    --enable-libssh \
+    --extra-cflags="-I/usr/local/cuda-11.3/include" \
+    --extra-ldflags="-L/usr/local/cuda-11.3/lib64" \
+    --nvccflags="-gencode arch=compute_35,code=sm_35 -O2" \
+    --enable-cuda-nvcc \
+    --enable-cuvid \
+    --enable-libnpp \
+    --enable-nvenc
   make -j "$(nproc)"
   make -j "$(nproc)" install
   hash -r
@@ -178,5 +183,6 @@ function update() {
   install
 }
 
+pkg_deps
+nv_deps
 update
-# nv_deps
