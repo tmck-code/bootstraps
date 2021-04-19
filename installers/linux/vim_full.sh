@@ -34,8 +34,8 @@ sudo apt install -y \
 # Download & install vim8 ---------------------------------
 
 echo '> Cloning vim8 from git'
-sudo chown -R "$USER:$USER" /usr/local/src
-cd /usr/local/src
+sudo chown -R "$USER:$USER" /tmp/
+cd /tmp/
 if [ -d vim ]; then
     cd vim ; git pull ; cd ../
 else
@@ -60,6 +60,8 @@ make -j "${n_proc}"
 sudo make -j "${n_proc}" install
 
 sudo ln -s /usr/local/bin/vim /usr/bin/vim
+
+cd "${LOCAL_DIR}"
 
 ${0%/*}/vim_plugins.sh
 

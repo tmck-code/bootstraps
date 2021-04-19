@@ -126,14 +126,65 @@ function install_alacritty() {
   rm -rf /tmp/alacritty
 }
 
-function install_i3() {
-  sudo apt update
-  sudo apt install -y \
-    i3 suckless-tools j4-dmenu-desktop
-  # TODO: do I really need this lighdm config option?
-  sudo sed 's/#user-session=default/user-session=i3/g' /etc/lightdm/lightdm.conf
-  echo 'exec /usr/bin/i3 -V -d all' > $HOME/.xsession
-  sudo shutdown -r now
+function install_obs() {
+  sudo apt-get install \
+        build-essential \
+        checkinstall \
+        cmake \
+        git \
+        libmbedtls-dev \
+        libasound2-dev \
+        libavcodec-dev \
+        libavdevice-dev \
+        libavfilter-dev \
+        libavformat-dev \
+        libavutil-dev \
+        libcurl4-openssl-dev \
+        libfdk-aac-dev \
+        libfontconfig-dev \
+        libfreetype6-dev \
+        libglvnd-dev \
+        libjack-jackd2-dev \
+        libjansson-dev \
+        libluajit-5.1-dev \
+        libpulse-dev \
+        libqt5x11extras5-dev \
+        libspeexdsp-dev \
+        libswresample-dev \
+        libswscale-dev \
+        libudev-dev \
+        libv4l-dev \
+        libvlc-dev \
+        libwayland-dev \
+        libx11-dev \
+        libx264-dev \
+        libxcb-shm0-dev \
+        libxcb-xinerama0-dev \
+        libxcomposite-dev \
+        libxinerama-dev \
+        pkg-config \
+        python3-dev \
+        qtbase5-dev \
+        qtbase5-private-dev \
+        libqt5svg5-dev \
+        swig \
+        libxcb-randr0-dev \
+        libxcb-xfixes0-dev \
+        libx11-xcb-dev \
+        libxcb1-dev \
+        libxss-dev \
+        libpipewire-0.3-dev \
+        qtwayland5 \
+        libnss3-dev
+
+  wget https://cdn-fastly.obsproject.com/downloads/cef_binary_4280_linux64.tar.bz2
+  tar -xjf ./cef_binary_4280_linux64.tar.bz2
+  git clone --recursive https://github.com/obsproject/obs-studio.git
+  cd obs-studio
+  mkdir build && cd build
+  cmake -DUNIX_STRUCTURE=1 -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_BROWSER=ON -DCEF_ROOT_DIR="../../cef_binary_4280_linux64" ..
+  make -j $(nproc)
+  sudo make install -j $(nproc)
 }
 
 function bootstrap() {
@@ -154,6 +205,7 @@ case ${1:-} in
   "pokesay" )     install_pokesay ;;
   "vscode" )      install_vscode ;;
   "chrome" )      install_chrome ;;
+  "obs" )         install_obs ;;
   "opera" )       install_opera ;;
   "ergodox" )     install_ergodox ;;
   "alacritty" )   install_alacritty ;;
