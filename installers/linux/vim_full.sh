@@ -2,8 +2,7 @@
 
 set -euxo pipefail
 
-
-LOCAL_DIR=$(pwd)
+PLUGIN_SCRIPT="${PWD}/installers/linux/vim_plugins.sh"
 WEEK=604800
 
 current_version="$(apt show -a vim)"
@@ -61,7 +60,7 @@ sudo make -j "${n_proc}" install
 
 sudo ln -s /usr/local/bin/vim /usr/bin/vim
 
-${0%/*}/vim_plugins.sh
+${PLUGIN_SCRIPT}
 
 chown -R "${USER}:${USER}" "${HOME}/.vim/"
 
