@@ -5,6 +5,13 @@ A home for all my linux bootstrapping scripts, somewhat mirrors the contents of 
 ## Use thusly
 
 * is _slightly_more annoying/more effort to set up, but is worth it in the future
+
+### One-liner
+
+```bash
+bash -c "$(curl https://raw.githubusercontent.com/tmck-code/bootstraps/master/bootstrap.sh)"
+```
+
 ### Pull repo via ssh
 
 ```bash
