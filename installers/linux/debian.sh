@@ -198,6 +198,15 @@ function install_fish() {
   sudo apt install -y fish
 }
 
+function install_z() {
+  rm -rf $HOME/bin/z/
+  git clone git@github.com:rupa/z.git $HOME/bin/z/
+}
+
+function install_cli_tools() {
+  install_z
+}
+
 function bootstrap() {
   echo "> Bootstrapping debian"
   clean_slate
@@ -210,7 +219,6 @@ function bootstrap() {
   echo "> Bootstrap complete!"
 }
 
-
 case ${1:-} in
   "base" )        install_base ;;
   "pokesay" )     install_pokesay ;;
@@ -221,6 +229,7 @@ case ${1:-} in
   "ergodox" )     install_ergodox ;;
   "alacritty" )   install_alacritty ;;
   "fish" )        install_fish ;;
+  "cli_tools" )   install_cli_tools ;;
   "i3" )          install_i3 ;;
   "clean_slate" ) clean_slate ;;
   "bootstrap"|* )   bootstrap ;;
