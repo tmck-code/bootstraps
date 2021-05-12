@@ -187,6 +187,17 @@ function install_obs() {
   sudo make install -j $(nproc)
 }
 
+function install_fish() {
+  echo 'deb http://download.opensuse.org/repositories/shells:/fish:/release:/3/Debian_10/ /' \
+    | sudo tee /etc/apt/sources.list.d/shells:fish:release:3.list
+  curl -fsSL https://download.opensuse.org/repositories/shells:fish:release:3/Debian_10/Release.key \
+    | gpg --dearmor \
+    | sudo tee /etc/apt/trusted.gpg.d/shells_fish_release_3.gpg \
+    > /dev/null
+  sudo apt update
+  sudo apt install -y fish
+}
+
 function bootstrap() {
   echo "> Bootstrapping debian"
   clean_slate
@@ -209,6 +220,7 @@ case ${1:-} in
   "opera" )       install_opera ;;
   "ergodox" )     install_ergodox ;;
   "alacritty" )   install_alacritty ;;
+  "fish" )        install_fish ;;
   "i3" )          install_i3 ;;
   "clean_slate" ) clean_slate ;;
   "bootstrap"|* )   bootstrap ;;
