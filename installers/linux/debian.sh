@@ -127,7 +127,8 @@ function install_alacritty() {
 }
 
 function install_steam() {
-  line_n=$(grep -n 'deb http://deb.debian.org/debian/ buster main$' /etc/apt/sources.list)
+  echo "Installing steam"
+  line_n=$(grep -n 'deb http://deb.debian.org/debian/ buster main$' /etc/apt/sources.list) || line_n=''
   if [ ! -z "${line_n:-}" ]; then
     sudo sed -i \
       "${line_n}s,deb http://deb.debian.org/debian/ buster main$,deb http://deb.debian.org/debian/ buster main contrib non-free,g" \
@@ -142,8 +143,11 @@ function install_steam() {
     libglx-mesa0:i386 \
     mesa-vulkan-drivers:i386 \
     libgl1-mesa-dri:i386
+
+  sudo apt install -y -t buster-backports nvidia-driver-libs:i386
 }
 
+# Heads Up! This finishes with a reboot
 function install_i3() {
   sudo apt update
   sudo apt install -y \
