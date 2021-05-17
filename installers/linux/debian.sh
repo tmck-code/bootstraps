@@ -147,15 +147,46 @@ function install_steam() {
   sudo apt install -y -t buster-backports nvidia-driver-libs:i386
 }
 
-# Heads Up! This finishes with a reboot
-function install_i3() {
-  sudo apt update
+function install_obs() {
   sudo apt install -y \
-    i3 suckless-tools j4-dmenu-desktop
-  # TODO: do I really need this lighdm config option?
-  sudo sed 's/#user-session=default/user-session=i3/g' /etc/lightdm/lightdm.conf
-  echo 'exec /usr/bin/i3 -V -d all' > $HOME/.xsession
-  sudo shutdown -r now
+    build-essential checkinstall cmake git libasound2-dev libavcodec-dev libavdevice-dev \
+    libavfilter-dev libavformat-dev libavutil-dev libcurl4-openssl-dev libfdk-aac-dev \
+    libfontconfig-dev libfreetype6-dev libglvnd-dev libjack-jackd2-dev libjansson-dev \
+    libluajit-5.1-dev libmbedtls-dev libnss3-dev libpipewire-0.3-dev libpulse-dev \
+    libqt5svg5-dev libqt5x11extras5-dev libspeexdsp-dev libswresample-dev libswscale-dev \
+    libudev-dev libv4l-dev libvlc-dev libwayland-dev libx11-dev libx11-xcb-dev libx264-dev \
+    libxcb-randr0-dev libxcb-shm0-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb1-dev \
+    libxcomposite-dev libxinerama-dev libxss-dev pkg-config python3-dev qtbase5-dev \
+    qtbase5-private-dev qtwayland5 swig
+
+  wget https://cdn-fastly.obsproject.com/downloads/cef_binary_4280_linux64.tar.bz2
+  tar -xjf ./cef_binary_4280_linux64.tar.bz2
+  git clone --recursive https://github.com/obsproject/obs-studio.git
+  cd obs-studio
+  mkdir build && cd build
+  cmake -DUNIX_STRUCTURE=1 -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_BROWSER=ON -DCEF_ROOT_DIR="../../cef_binary_4280_linux64" ..
+  make -j $(nproc)
+  sudo make install -j $(nproc)
+}
+
+function install_fish() {
+  echo 'deb http://download.opensuse.org/repositories/shells:/fish:/release:/3/Debian_10/ /' \
+    | sudo tee /etc/apt/sources.list.d/shells:fish:release:3.list
+  curl -fsSL https://download.opensuse.org/repositories/shells:fish:release:3/Debian_10/Release.key \
+    | gpg --dearmor \
+    | sudo tee /etc/apt/trusted.gpg.d/shells_fish_release_3.gpg \
+    > /dev/null
+  sudo apt update
+  sudo apt install -y fish
+}
+
+function install_z() {
+  rm -rf $HOME/bin/z/
+  git clone git@github.com:rupa/z.git $HOME/bin/z/
+}
+
+function install_cli_tools() {
+  install_z
 }
 
 function bootstrap() {
@@ -170,13 +201,17 @@ function bootstrap() {
   echo "> Bootstrap complete!"
 }
 
-
 case ${1:-} in
   "alacritty" )   install_alacritty ;;
   "base" )        install_base ;;
   "chrome" )      install_chrome ;;
   "ergodox" )     install_ergodox ;;
-  "i3" )          install_i3 ;;
+  "obs" )         install_obs ;;
+  "opera" )       install_opera ;;
+  "ergodox" )     install_ergodox ;;
+  "alacritty" )   install_alacritty ;;
+  "fish" )        install_fish ;;
+  "cli_tools" )   install_cli_tools ;;
   "opera" )       install_opera ;;
   "pokesay" )     install_pokesay ;;
   "steam" )       install_steam ;;

@@ -2,8 +2,7 @@
 
 set -euxo pipefail
 
-
-LOCAL_DIR=$(pwd)
+PLUGIN_SCRIPT="${PWD}/installers/linux/vim_plugins.sh"
 WEEK=604800
 
 current_version="$(apt show -a vim)"
@@ -34,8 +33,8 @@ sudo apt install -y \
 # Download & install vim8 ---------------------------------
 
 echo '> Cloning vim8 from git'
-sudo chown -R "$USER:$USER" /usr/local/src
-cd /usr/local/src
+sudo chown -R "$USER:$USER" /tmp/
+cd /tmp/
 if [ -d vim ]; then
     cd vim ; git pull ; cd ../
 else
@@ -61,7 +60,7 @@ sudo make -j "${n_proc}" install
 
 sudo ln -s /usr/local/bin/vim /usr/bin/vim
 
-${0%/*}/vim_plugins.sh
+${PLUGIN_SCRIPT}
 
 chown -R "${USER}:${USER}" "${HOME}/.vim/"
 

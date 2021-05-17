@@ -15,6 +15,7 @@ ntpeters/vim-better-whitespace
 tpope/vim-fugitive
 tpope/vim-sensible
 tpope/vim-surround
+vim-scripts/indentpython.vim
 vim-scripts/Align"
 
 export aesthetic_repos="\
@@ -25,6 +26,7 @@ morhetz/gruvbox
 mxw/vim-jsx.git
 ntk148v/vim-horizon
 pangloss/vim-javascript
+paramagicdev/vim-medic_chalk
 rakr/vim-one
 rigellute/shades-of-purple.vim
 ryanoasis/vim-devicons
