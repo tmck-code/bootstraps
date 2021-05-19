@@ -185,6 +185,12 @@ function install_z() {
   git clone git@github.com:rupa/z.git $HOME/bin/z/
 }
 
+function install_spacemacs() {
+  sudo apt update
+  sudo apt install -y emacs
+  git clone https://github.com/syl20bnr/spacemacs $HOME/.emacs.d
+}
+
 function install_cli_tools() {
   install_z
 }
@@ -195,6 +201,7 @@ function bootstrap() {
   install_base
   install_pokesay
   install_vscode
+  install_spacemacs
   install_chrome
   install_ergodox
   install_alacritty
@@ -216,6 +223,7 @@ case ${1:-} in
   "pokesay" )     install_pokesay ;;
   "steam" )       install_steam ;;
   "vscode" )      install_vscode ;;
+  "spacemacs" )   install_spacemacs ;;
   "clean_slate" ) clean_slate ;;
   "bootstrap"|* )   bootstrap ;;
 esac
