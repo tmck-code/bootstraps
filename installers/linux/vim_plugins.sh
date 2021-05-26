@@ -37,10 +37,14 @@ tiagofumo/vim-nerdtree-syntax-highlight
 vim-airline/vim-airline
 vim-airline/vim-airline-themes"
 
+export nvim_repos="\
+deoplete-plugins/deoplete-jedi
+Shougo/deoplete.nvim"
+
 N_CONCURRENT_DOWNLOADS=2
 
 function install_pathogen() {
-  echo "- Installing Pathogen (plugin/plugin manager)"
+  echo -e "\n* Installing Pathogen (plugin/plugin manager) -----------------"
 
   [ ! -f "${HOME}/.vim/bundle" ] && mkdir -p "${HOME}/.vim/bundle"
 
@@ -53,23 +57,26 @@ function install_pathogen() {
 }
 
 function install_plugin() {
-  echo "- Installing vim plugin: ${1}"
+  echo -n "- Installing vim plugin: ${1} ... "
   repo=$(echo "${1}" | cut -d '/' -f 2)
   if [ ! -d "${repo}" ]; then
+    echo -n "not installed, cloning... "
     git clone --depth 1 "git@github.com:${1}" || echo "- vim plugin already exists: ${1}"
   else
-    echo "-- Plugin already installed: ${1}, skipping"
+    echo -n "already installed, updating... "
+    (cd "${repo}" && git pull -q)
   fi
+  echo "complete"
 }
 export -f install_plugin
 
 function install_plugin_category() {
   cd "${HOME}/.vim/bundle"
+  echo -e "\n* Installing ${1} plugins -----------------------"
   echo "${!1}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_plugin
 }
 
 function install_all_plugins() {
-  echo "- Installing all plugins"
   install_pathogen
   install_plugin_category "core_repos"
   install_plugin_category "aesthetic_repos"
@@ -80,6 +87,8 @@ export -f install_all_plugins
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
   echo "- Sourced vim plugin functions"
 else
+  nvim="${1:-}"
   install_all_plugins
+  [ -n "${nvim}" ] && install_plugin_category "nvim_repos"
 fi
 

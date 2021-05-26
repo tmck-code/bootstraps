@@ -101,6 +101,15 @@ EOF
   mv wally $HOME/bin
 }
 
+function install_rust() {
+  if ! command -v rustup; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    source $HOME/.cargo/env
+    rustup override set stable
+    rustup update stable
+  fi
+}
+
 function install_alacritty() {
   sudo apt update
   sudo apt install -y \
@@ -108,12 +117,7 @@ function install_alacritty() {
     libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev
 
   # install rustup/cargo
-  if ! command -v rustup; then
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    source $HOME/.cargo/env
-    rustup override set stable
-    rustup update stable
-  fi
+  install_rust
   [ -d /tmp/alacritty ] && rm -rf /tmp/alacritty
 
   cd /tmp/
@@ -212,18 +216,16 @@ case ${1:-} in
   "alacritty" )   install_alacritty ;;
   "base" )        install_base ;;
   "chrome" )      install_chrome ;;
+  "clean_slate" ) clean_slate ;;
+  "cli_tools" )   install_cli_tools ;;
   "ergodox" )     install_ergodox ;;
+  "fish" )        install_fish ;;
   "obs" )         install_obs ;;
   "opera" )       install_opera ;;
-  "ergodox" )     install_ergodox ;;
-  "alacritty" )   install_alacritty ;;
-  "fish" )        install_fish ;;
-  "cli_tools" )   install_cli_tools ;;
-  "opera" )       install_opera ;;
   "pokesay" )     install_pokesay ;;
+  "rust" )        install_rust ;;
+  "spacemacs" )   install_spacemacs ;;
   "steam" )       install_steam ;;
   "vscode" )      install_vscode ;;
-  "spacemacs" )   install_spacemacs ;;
-  "clean_slate" ) clean_slate ;;
   "bootstrap"|* )   bootstrap ;;
 esac
