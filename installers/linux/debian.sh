@@ -130,27 +130,6 @@ function install_alacritty() {
   rm -rf /tmp/alacritty
 }
 
-function install_steam() {
-  echo "Installing steam"
-  line_n=$(grep -n 'deb http://deb.debian.org/debian/ buster main$' /etc/apt/sources.list) || line_n=''
-  if [ ! -z "${line_n:-}" ]; then
-    sudo sed -i \
-      "${line_n}s,deb http://deb.debian.org/debian/ buster main$,deb http://deb.debian.org/debian/ buster main contrib non-free,g" \
-      /etc/apt/sources.list
-  fi
-
-  sudo dpkg --add-architecture i386
-  sudo apt update
-  sudo apt install -y \
-    steam \
-    mesa-vulkan-drivers \
-    libglx-mesa0:i386 \
-    mesa-vulkan-drivers:i386 \
-    libgl1-mesa-dri:i386
-
-  sudo apt install -y -t buster-backports nvidia-driver-libs:i386
-}
-
 function install_fish() {
   echo 'deb http://download.opensuse.org/repositories/shells:/fish:/release:/3/Debian_10/ /' \
     | sudo tee /etc/apt/sources.list.d/shells:fish:release:3.list
@@ -191,7 +170,6 @@ function bootstrap() {
 }
 
 function extras() {
-  install_steam
   install_fish
   install_cli_tools
 }
@@ -208,7 +186,6 @@ case ${1:-} in
   "pokesay" )     install_pokesay ;;
   "rust" )        install_rust ;;
   "spacemacs" )   install_spacemacs ;;
-  "steam" )       install_steam ;;
   "vscode" )      install_vscode ;;
   "extras" )      extras ;;
   "bootstrap"|* )   bootstrap ;;
