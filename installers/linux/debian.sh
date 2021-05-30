@@ -28,7 +28,7 @@ function install_base() {
     wget curl git tig tree \
     tmux htop iotop bmon sysstat \
     parallel \
-    cowsay fortune \
+    cowsay fortune fortunes \
     locales build-essential yasm
 }
 
@@ -151,28 +151,6 @@ function install_steam() {
   sudo apt install -y -t buster-backports nvidia-driver-libs:i386
 }
 
-function install_obs() {
-  sudo apt install -y \
-    build-essential checkinstall cmake git libasound2-dev libavcodec-dev libavdevice-dev \
-    libavfilter-dev libavformat-dev libavutil-dev libcurl4-openssl-dev libfdk-aac-dev \
-    libfontconfig-dev libfreetype6-dev libglvnd-dev libjack-jackd2-dev libjansson-dev \
-    libluajit-5.1-dev libmbedtls-dev libnss3-dev libpipewire-0.3-dev libpulse-dev \
-    libqt5svg5-dev libqt5x11extras5-dev libspeexdsp-dev libswresample-dev libswscale-dev \
-    libudev-dev libv4l-dev libvlc-dev libwayland-dev libx11-dev libx11-xcb-dev libx264-dev \
-    libxcb-randr0-dev libxcb-shm0-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb1-dev \
-    libxcomposite-dev libxinerama-dev libxss-dev pkg-config python3-dev qtbase5-dev \
-    qtbase5-private-dev qtwayland5 swig
-
-  wget https://cdn-fastly.obsproject.com/downloads/cef_binary_4280_linux64.tar.bz2
-  tar -xjf ./cef_binary_4280_linux64.tar.bz2
-  git clone --recursive https://github.com/obsproject/obs-studio.git
-  cd obs-studio
-  mkdir build && cd build
-  cmake -DUNIX_STRUCTURE=1 -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_BROWSER=ON -DCEF_ROOT_DIR="../../cef_binary_4280_linux64" ..
-  make -j $(nproc)
-  sudo make install -j $(nproc)
-}
-
 function install_fish() {
   echo 'deb http://download.opensuse.org/repositories/shells:/fish:/release:/3/Debian_10/ /' \
     | sudo tee /etc/apt/sources.list.d/shells:fish:release:3.list
@@ -212,6 +190,12 @@ function bootstrap() {
   echo "> Bootstrap complete!"
 }
 
+function extras() {
+  install_steam
+  install_fish
+  install_cli_tools
+}
+
 case ${1:-} in
   "alacritty" )   install_alacritty ;;
   "base" )        install_base ;;
@@ -220,12 +204,12 @@ case ${1:-} in
   "cli_tools" )   install_cli_tools ;;
   "ergodox" )     install_ergodox ;;
   "fish" )        install_fish ;;
-  "obs" )         install_obs ;;
   "opera" )       install_opera ;;
   "pokesay" )     install_pokesay ;;
   "rust" )        install_rust ;;
   "spacemacs" )   install_spacemacs ;;
   "steam" )       install_steam ;;
   "vscode" )      install_vscode ;;
+  "extras" )      extras ;;
   "bootstrap"|* )   bootstrap ;;
 esac
