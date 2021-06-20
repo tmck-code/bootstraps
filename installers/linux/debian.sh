@@ -80,7 +80,7 @@ function install_opera() {
 }
 
 function install_ergodox() {
-  sudo apt install -y gtk+3.0 libwebkit2gtk-4.0 libusb-dev
+  sudo apt install -y libusb-dev # gtk+3.0 libwebkit2gtk-4.0 libusb-dev
   local config=$(cat <<EOF
 # Teensy rules for the Ergodox EZ
 ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", ENV{ID_MM_DEVICE_IGNORE}="1"
