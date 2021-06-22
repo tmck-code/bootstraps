@@ -169,8 +169,8 @@ function install_obs() {
   cd obs-studio
   mkdir build && cd build
   cmake -DUNIX_STRUCTURE=1 -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_BROWSER=ON -DCEF_ROOT_DIR="../../cef_binary_4280_linux64" ..
-  make -j $(nproc)
-  sudo make install -j $(nproc)
+  make -j "$(nproc)"
+  sudo make install -j "$(nproc)"
 }
 
 function install_fish() {
@@ -185,14 +185,25 @@ function install_fish() {
 }
 
 function install_z() {
-  rm -rf $HOME/bin/z/
-  git clone git@github.com:rupa/z.git $HOME/bin/z/
+  rm -rf "$HOME/bin/z/"
+  git clone git@github.com:rupa/z.git "$HOME/bin/z/"
 }
 
 function install_spacemacs() {
   sudo apt update
   sudo apt install -y emacs
-  git clone https://github.com/syl20bnr/spacemacs $HOME/.emacs.d
+  git clone https://github.com/syl20bnr/spacemacs "$HOME/.emacs.d"
+}
+
+function install_git() {
+  sudo apt install -y \
+    git gettext \
+    libssl-dev libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev
+
+  [ -d /tmp/git ] || git clone https://github.com/git/git.git /tmp/git
+  cd /tmp/git && git pull
+  make prefix=/usr/local -j "$(nproc)" all
+  sudo make prefix=/usr/local -j "$(nproc)" install
 }
 
 function install_cli_tools() {
@@ -220,6 +231,7 @@ case ${1:-} in
   "cli_tools" )   install_cli_tools ;;
   "ergodox" )     install_ergodox ;;
   "fish" )        install_fish ;;
+  "git" )         install_git ;;
   "obs" )         install_obs ;;
   "opera" )       install_opera ;;
   "pokesay" )     install_pokesay ;;
