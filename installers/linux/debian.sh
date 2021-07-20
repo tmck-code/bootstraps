@@ -28,7 +28,7 @@ function install_base() {
     wget curl git tig tree \
     tmux htop iotop bmon sysstat \
     parallel \
-    cowsay fortune \
+    cowsay fortune fortunes \
     locales build-essential yasm
 }
 
@@ -80,7 +80,7 @@ function install_opera() {
 }
 
 function install_ergodox() {
-  sudo apt install -y gtk+3.0 libwebkit2gtk-4.0 libusb-dev
+  sudo apt install -y libusb-dev # gtk+3.0 libwebkit2gtk-4.0 libusb-dev
   local config=$(cat <<EOF
 # Teensy rules for the Ergodox EZ
 ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", ENV{ID_MM_DEVICE_IGNORE}="1"
@@ -206,6 +206,14 @@ function install_git() {
   sudo make prefix=/usr/local -j "$(nproc)" install
 }
 
+function install_sbt() {
+  echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+  echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
+  curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
+  sudo apt-get update
+  sudo apt-get install sbt
+}
+
 function install_cli_tools() {
   install_z
 }
@@ -223,6 +231,11 @@ function bootstrap() {
   echo "> Bootstrap complete!"
 }
 
+function extras() {
+  install_fish
+  install_cli_tools
+}
+
 case ${1:-} in
   "alacritty" )   install_alacritty ;;
   "base" )        install_base ;;
@@ -236,8 +249,10 @@ case ${1:-} in
   "opera" )       install_opera ;;
   "pokesay" )     install_pokesay ;;
   "rust" )        install_rust ;;
-  "spacemacs" )   install_spacemacs ;;
+  "sbt" )         install_sbt ;;
   "steam" )       install_steam ;;
+  "spacemacs" )   install_spacemacs ;;
   "vscode" )      install_vscode ;;
+  "extras" )      extras ;;
   "bootstrap"|* )   bootstrap ;;
 esac
