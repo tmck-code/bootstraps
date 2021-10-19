@@ -48,6 +48,15 @@ sudo apt update && \
   ./installers/dotfile
 ```
 
+### Manjaro
+
+```bash
+sudo pacman -Syu --noconfirm && \
+  sudo pacman -S --noconfirm git && \
+  git clone git@github.com:tmck-code/bootstraps.git && \
+  cd bootstraps
+```
+
 ## Windows preparation
 
 1. Install distro of choice through the Windows Store (Ubuntu, Debian etc.)
