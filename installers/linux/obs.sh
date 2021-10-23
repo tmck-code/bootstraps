@@ -4,7 +4,11 @@ set -euo pipefail
 
 function detect_os() {
   for os in ubuntu debian; do
-    grep -qi "$os" /etc/lsb-release && echo "$os" && return 0
+    if [ -f /etc/lsb-release ]; then
+      grep -qi "$os" /etc/lsb-release && echo "$os" && return 0
+    else
+      grep -qi "$os" /etc/os-release && echo "$os" && return 0
+    fi
   done
 }
 

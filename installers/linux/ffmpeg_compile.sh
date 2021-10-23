@@ -60,11 +60,18 @@ function nv_deps() {
   make PREFIX="/home/local/ffmpeg_build" BINDDIR="/home/local/bin"
   sudo make PREFIX="/home/local/ffmpeg_build" BINDDIR="/home/local/bin" -j "$(nproc)" install
 
-  # CUDA
+  # wget https://developer.download.nvidia.com/compute/cuda/11.4.2/local_installers/cuda-repo-debian10-11-4-local_11.4.2-470.57.02-1_amd64.deb
+  sudo dpkg -i cuda-repo-debian10-11-4-local_11.4.2-470.57.02-1_amd64.deb
+  sudo apt-key add /var/cuda-repo-debian10-11-4-local/7fa2af80.pub
   sudo add-apt-repository contrib
-  sudo apt update
-  sudo apt purge -y cuda
-  sudo apt install -y cuda
+  sudo apt-get update
+  sudo apt-get -y install cuda
+
+  # CUDA
+  # sudo add-apt-repository contrib
+  # sudo apt update
+  # # sudo apt purge -y cuda
+  # sudo apt install -y cuda
 }
 
 function x264() {
