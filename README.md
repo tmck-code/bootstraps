@@ -51,7 +51,7 @@ sudo apt update && \
 ### Manjaro
 
 ```bash
-sudo pacman -Syu --noconfirm && \
+sudo pacman -Sy --noconfirm && \
   sudo pacman -S --noconfirm git && \
   git clone git@github.com:tmck-code/bootstraps.git && \
   cd bootstraps
