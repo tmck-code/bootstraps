@@ -57,15 +57,15 @@ function nv_deps() {
   cd ~/ffmpeg_sources
   git -C nv-codec-headers pull 2> /dev/null || git clone --depth 1 https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
   cd nv-codec-headers
-  make PREFIX="/home/local/ffmpeg_build" BINDDIR="/home/local/bin"
-  sudo make PREFIX="/home/local/ffmpeg_build" BINDDIR="/home/local/bin" -j "$(nproc)" install
+  make
+  sudo make -j "$(nproc)" install
 
   # wget https://developer.download.nvidia.com/compute/cuda/11.4.2/local_installers/cuda-repo-debian10-11-4-local_11.4.2-470.57.02-1_amd64.deb
-  sudo dpkg -i cuda-repo-debian10-11-4-local_11.4.2-470.57.02-1_amd64.deb
-  sudo apt-key add /var/cuda-repo-debian10-11-4-local/7fa2af80.pub
-  sudo add-apt-repository contrib
-  sudo apt-get update
-  sudo apt-get -y install cuda
+  # sudo dpkg -i cuda-repo-debian10-11-4-local_11.4.2-470.57.02-1_amd64.deb
+  # sudo apt-key add /var/cuda-repo-debian10-11-4-local/7fa2af80.pub
+  # sudo add-apt-repository contrib
+  # sudo apt-get update
+  # sudo apt-get -y install cuda
 
   # CUDA
   # sudo add-apt-repository contrib
@@ -113,7 +113,9 @@ function libbluray() {
     autoreconf -fiv
   fi
 
-  PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --disable-shared --enable-static --disable-examples --disable-bdjava-jar --disable-doxygen-doc --disable-doxygen-dot --without-fontconfig --without-freetype
+  PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" \
+    --disable-shared --enable-static --disable-examples --disable-bdjava-jar \
+    --disable-doxygen-doc --disable-doxygen-dot --without-fontconfig --without-freetype
   PATH="$HOME/bin:$PATH" make -j "$(nproc)"
   make -j "$(nproc)" install
 }
@@ -130,11 +132,13 @@ function ffmpeg() {
   cd ~/ffmpeg_sources
   # if younger_than_a_week ffmpeg; then return; fi
 
-  wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
-  tar xjvf ffmpeg-snapshot.tar.bz2
+  # wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
+  # tar xjvf ffmpeg-snapshot.tar.bz2
   cd ffmpeg
   # make distclean
-  PATH="$HOME/ffmpeg_build/bin/:$HOME/bin:/usr/local/cuda-11.3/bin/:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
+  export PATH="/usr/local/cuda-11.5/bin:$PATH"
+  export LD_LIBRARY_PATH="/usr/local/cuda-11.5/lib64:$LD_LIBRARY_PATH"
+  PATH="$HOME/ffmpeg_build/bin/:$HOME/bin:/usr/local/cuda-11.5/bin/:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
     --prefix="$HOME/ffmpeg_build" \
     --pkg-config-flags="--static" \
     --extra-cflags="-I$HOME/ffmpeg_build/include -I/usr/include -I/usr/local/include" \
@@ -151,9 +155,9 @@ function ffmpeg() {
     --enable-libx265 \
     --enable-nonfree \
     --enable-libssh \
-    --extra-cflags="-I/usr/local/cuda-11.3/include" \
-    --extra-ldflags="-L/usr/local/cuda-11.3/lib64" \
-    --nvccflags="-gencode arch=compute_35,code=sm_35 -O2" \
+    --extra-cflags="-I/usr/local/cuda-11.5/include" \
+    --extra-ldflags="-L/usr/local/cuda-11.5/lib64" \
+    --nvccflags="-gencode arch=compute_52,code=sm_52 -O2" \
     --enable-cuda-nvcc \
     --enable-cuvid \
     --enable-libnpp \
