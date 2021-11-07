@@ -214,6 +214,14 @@ function install_sbt() {
   sudo apt-get install sbt
 }
 
+function install_balena_etcher() {
+  curl -1sLf \
+     'https://dl.cloudsmith.io/public/balena/etcher/setup.deb.sh' \
+     | sudo -E bash
+  sudo apt-get update
+  sudo apt-get install balena-etcher-electron
+}
+
 function install_cli_tools() {
   install_z
 }
@@ -237,22 +245,23 @@ function extras() {
 }
 
 case ${1:-} in
-  "alacritty" )   install_alacritty ;;
-  "base" )        install_base ;;
-  "chrome" )      install_chrome ;;
-  "clean_slate" ) clean_slate ;;
-  "cli_tools" )   install_cli_tools ;;
-  "ergodox" )     install_ergodox ;;
-  "fish" )        install_fish ;;
-  "git" )         install_git ;;
-  "obs" )         install_obs ;;
-  "opera" )       install_opera ;;
-  "pokesay" )     install_pokesay ;;
-  "rust" )        install_rust ;;
-  "sbt" )         install_sbt ;;
-  "steam" )       install_steam ;;
-  "spacemacs" )   install_spacemacs ;;
-  "vscode" )      install_vscode ;;
-  "extras" )      extras ;;
+  "alacritty" )     install_alacritty ;;
+  "base" )          install_base ;;
+  "chrome" )        install_chrome ;;
+  "clean_slate" )   clean_slate ;;
+  "cli_tools" )     install_cli_tools ;;
+  "ergodox" )       install_ergodox ;;
+  "fish" )          install_fish ;;
+  "git" )           install_git ;;
+  "obs" )           install_obs ;;
+  "opera" )         install_opera ;;
+  "pokesay" )       install_pokesay ;;
+  "rust" )          install_rust ;;
+  "sbt" )           install_sbt ;;
+  "steam" )         install_steam ;;
+  "spacemacs" )     install_spacemacs ;;
+  "vscode" )        install_vscode ;;
+  "balena_etcher" ) install_balena_etcher ;;
+  "extras" )        extras ;;
   "bootstrap"|* )   bootstrap ;;
 esac
