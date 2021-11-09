@@ -35,15 +35,16 @@ function younger_than_a_week() {
 
 function nasm() {
   cd ~/ffmpeg_sources
+  local version=2.15.05
   # if younger_than_a_week nasm-2.14.02; then return;  fi
 
-  wget https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.bz2
-  tar xjvf nasm-2.14.02.tar.bz2
-  cd nasm-2.14.02
+  wget https://www.nasm.us/pub/nasm/releasebuilds/$version/nasm-$version.tar.bz2
+  tar xjvf nasm-$version.tar.bz2
+  cd nasm-$version
   ./autogen.sh
   PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
   make -j "$(nproc)"
-  make -j "$(nproc)" install
+  sudo make -j "$(nproc)" install
 }
 
 function yasm() {
@@ -86,7 +87,7 @@ function x264() {
     --enable-static \
     --enable-pic
   PATH="$HOME/bin:$PATH" make -j "$(nproc)"
-  make -j "$(nproc)" install
+  sudo make -j "$(nproc)" install
 }
 
 function x265() {
@@ -97,7 +98,7 @@ function x265() {
   cd x265_git/build/linux
   PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED=off ../../source
   PATH="$HOME/bin:$PATH" make -j "$(nproc)"
-  make -j "$(nproc)" install
+  sudo make -j "$(nproc)" install
 }
 
 function libbluray() {
@@ -117,7 +118,7 @@ function libbluray() {
     --disable-shared --enable-static --disable-examples --disable-bdjava-jar \
     --disable-doxygen-doc --disable-doxygen-dot --without-fontconfig --without-freetype
   PATH="$HOME/bin:$PATH" make -j "$(nproc)"
-  make -j "$(nproc)" install
+  sudo make -j "$(nproc)" install
 }
 
 function others() {
@@ -132,12 +133,12 @@ function ffmpeg() {
   cd ~/ffmpeg_sources
   # if younger_than_a_week ffmpeg; then return; fi
 
-  # wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
-  # tar xjvf ffmpeg-snapshot.tar.bz2
+  wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
+  tar xjvf ffmpeg-snapshot.tar.bz2
   cd ffmpeg
   # make distclean
   export PATH="/usr/local/cuda-11.5/bin:$PATH"
-  export LD_LIBRARY_PATH="/usr/local/cuda-11.5/lib64:$LD_LIBRARY_PATH"
+  export LD_LIBRARY_PATH="/usr/local/cuda-11.5/lib64:${LD_LIBRARY_PATH:-}"
   PATH="$HOME/ffmpeg_build/bin/:$HOME/bin:/usr/local/cuda-11.5/bin/:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
     --prefix="$HOME/ffmpeg_build" \
     --pkg-config-flags="--static" \
@@ -163,16 +164,16 @@ function ffmpeg() {
     --enable-libnpp \
     --enable-nvenc
   make -j "$(nproc)"
-  make -j "$(nproc)" install
+  sudo make -j "$(nproc)" install
   hash -r
 }
 
 function remove_compilations() {
-  rm -rf ~/ffmpeg_build ~/bin/{ffmpeg,ffprobe,ffplay,x264,x265}
+  sudo rm -rf ~/ffmpeg_build ~/bin/{ffmpeg,ffprobe,ffplay,x264,x265}
 }
 
 function purge() {
-  rm -rf ~/ffmpeg_build ~/ffmpeg_sources ~/bin/{ffmpeg,ffprobe,ffplay,x264,x265,nasm,vsyasm,yasm,ytasm}
+  sudo rm -rf ~/ffmpeg_build ~/ffmpeg_sources ~/bin/{ffmpeg,ffprobe,ffplay,x264,x265,nasm,vsyasm,yasm,ytasm}
   # sed -i '/ffmpeg_build/d' ~/.manpath
   hash -r
 }
