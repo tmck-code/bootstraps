@@ -2,144 +2,116 @@
 
 set -euxo pipefail
 
+CUDA_VERSION_MAJOR=11.5
+CUDA_VERSION=11.5.0
+NVIDIA_DRIVER_VERSION=495.29.05
+CUDA_OS_VERSION_SLUG=debian11-11-5
+NASM_VERSION=2.15.05
+
+export PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig"
+export LD_LIBRARY_PATH="/usr/local/cuda-$CUDA_VERSION_MAJOR/lib64:${LD_LIBRARY_PATH:-}"
+export PATH="$HOME/bin:/usr/local/cuda-$CUDA_VERSION_MAJOR/bin:$PATH"
+
 function pkg_deps() {
-  mkdir -p ~/ffmpeg_sources ~/ffmpeg_build ~/bin
   sudo apt update
   sudo apt -y install \
-    autoconf \
-    automake \
-    build-essential \
-    cmake \
-    git-core \
-    libass-dev \
-    libfreetype6-dev \
-    libsdl2-dev \
-    libtool \
-    libssh-dev \
-    libssl-dev \
-    libva-dev \
-    libvdpau-dev \
-    libvorbis-dev \
-    libxcb1-dev \
-    libxcb-shm0-dev \
-    libxcb-xfixes0-dev \
-    pkg-config \
-    texinfo \
-    wget \
-    zlib1g-dev
+    autoconf automake build-essential cmake git-core \
+    libass-dev libfreetype6-dev libsdl2-dev libtool \
+    libssh-dev libssl-dev \
+    libva-dev libvdpau-dev libvorbis-dev \
+    libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev \
+    pkg-config texinfo wget yasm zlib1g-dev \
+    libvpx-dev libmp3lame-dev libopus-dev
 }
 
 function younger_than_a_week() {
-  echo $[ $[ $(date +%s) - $(date -r "${1}" +%s) ] < 604800 ]
+  if [ ! -d $1 ]; then
+    echo "- $1 does not exist, installing"
+    return 1
+  fi
+  age=$[ $[ $(date +%s) - $(date -r "${1}" +%s) ] / 60 / 60 / 24 ]
+
+  if (( "$age" < 7 )); then
+    echo "- $1 is $age days old, skipping"
+    return 1
+  else
+    echo "- $1 is $age days old, updating"
+    return 0
+  fi
 }
+
 
 function nasm() {
   cd ~/ffmpeg_sources
-  local version=2.15.05
-  # if younger_than_a_week nasm-2.14.02; then return;  fi
+  [ -d nasm-$NASM_VERSION ] && return
 
-  wget https://www.nasm.us/pub/nasm/releasebuilds/$version/nasm-$version.tar.bz2
-  tar xjvf nasm-$version.tar.bz2
-  cd nasm-$version
+  wget https://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/nasm-$NASM_VERSION.tar.bz2
+  tar xjvf nasm-$NASM_VERSION.tar.bz2
+  cd nasm-$NASM_VERSION
   ./autogen.sh
-  PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
+  ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
   make -j "$(nproc)"
   sudo make -j "$(nproc)" install
 }
 
-function yasm() {
-  # need >= 1.2, debian provides 1.3 as of 2018/07/26
-  sudo apt install -y yasm
-}
-
+# NV headers & CUDA
 function nv_deps() {
-  # NV headers
-  mkdir -p ~/ffmpeg_sources
   cd ~/ffmpeg_sources
+  younger_than_a_week nv-codec-headers && return
+
   git -C nv-codec-headers pull 2> /dev/null || git clone --depth 1 https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
   cd nv-codec-headers
   make
   sudo make -j "$(nproc)" install
 
-  # wget https://developer.download.nvidia.com/compute/cuda/11.4.2/local_installers/cuda-repo-debian10-11-4-local_11.4.2-470.57.02-1_amd64.deb
-  # sudo dpkg -i cuda-repo-debian10-11-4-local_11.4.2-470.57.02-1_amd64.deb
-  # sudo apt-key add /var/cuda-repo-debian10-11-4-local/7fa2af80.pub
-  # sudo add-apt-repository contrib
-  # sudo apt-get update
-  # sudo apt-get -y install cuda
-
   # CUDA
-  # sudo add-apt-repository contrib
-  # sudo apt update
-  # # sudo apt purge -y cuda
-  # sudo apt install -y cuda
+  if [ -d /var/cuda-repo-$CUDA_OS_VERSION_SLUG-local/ ]; then
+    sudo apt update
+    sudo apt upgrade -y
+  else
+    wget https://developer.download.nvidia.com/compute/cuda/$CUDA_VERSION/local_installers/cuda-repo-$CUDA_OS_VERSION_SLUG-local_$CUDA_VERSION-$NVIDIA_DRIVER_VERSION-1_amd64.deb
+    sudo dpkg -i cuda-repo-$CUDA_OS_VERSION_SLUG-local_$CUDA_VERSION-$NVIDIA_DRIVER_VERSION-1_amd64.deb
+    sudo apt-key add /var/cuda-repo-$CUDA_OS_VERSION_SLUG-local/7fa2af80.pub
+    # sudo add-apt-repository contrib
+    sudo apt-get update
+    sudo apt-get -y install cuda
+  fi
 }
 
 function x264() {
   cd ~/ffmpeg_sources
-  # if younger_than_a_week x264; then return;  fi
+  younger_than_a_week x264 && return
 
   git -C x264 pull 2> /dev/null || git clone --depth 1 https://code.videolan.org/videolan/x264.git
   cd x264
-  PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
-    --prefix="$HOME/ffmpeg_build" \
-    --bindir="$HOME/bin" \
-    --enable-static \
-    --enable-pic
-  PATH="$HOME/bin:$PATH" make -j "$(nproc)"
+   ./configure \
+    --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static --enable-pic
+  make -j "$(nproc)"
   sudo make -j "$(nproc)" install
 }
 
 function x265() {
-  sudo apt-get install libnuma-dev
   cd ~/ffmpeg_sources
+  younger_than_a_week x265_git && return
+
+  sudo apt-get install libnuma-dev
   git -C x265_git pull 2> /dev/null || git clone https://bitbucket.org/multicoreware/x265_git
   # if younger_than_a_week x265; then return;  fi
   cd x265_git/build/linux
-  PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED=off ../../source
-  PATH="$HOME/bin:$PATH" make -j "$(nproc)"
+  cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED=off ../../source
+  make -j "$(nproc)"
   sudo make -j "$(nproc)" install
-}
-
-function libbluray() {
-  sudo apt-get install -y --no-install-recommends libxml2-dev ant
-  cd ~/ffmpeg_sources
-
-  if [ -d libbluray ]; then
-    (cd libbluray && git pull && make uninstall && make clean)
-  else
-    git clone https://code.videolan.org/videolan/libbluray.git
-    cd libbluray
-    git submodule update --init
-    autoreconf -fiv
-  fi
-
-  PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" \
-    --disable-shared --enable-static --disable-examples --disable-bdjava-jar \
-    --disable-doxygen-doc --disable-doxygen-dot --without-fontconfig --without-freetype
-  PATH="$HOME/bin:$PATH" make -j "$(nproc)"
-  sudo make -j "$(nproc)" install
-}
-
-function others() {
-  sudo apt install -y \
-    libvpx-dev \
-    libmp3lame-dev \
-    libopus-dev
 }
 
 function ffmpeg() {
-  mkdir -p ~/ffmpeg_sources ~/bin
   cd ~/ffmpeg_sources
-  # if younger_than_a_week ffmpeg; then return; fi
+  younger_than_a_week ffmpeg && return
 
   wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
   tar xjvf ffmpeg-snapshot.tar.bz2
   cd ffmpeg
   # make distclean
-  export PATH="/usr/local/cuda-11.5/bin:$PATH"
-  export LD_LIBRARY_PATH="/usr/local/cuda-11.5/lib64:${LD_LIBRARY_PATH:-}"
-  PATH="$HOME/ffmpeg_build/bin/:$HOME/bin:/usr/local/cuda-11.5/bin/:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
+  ./configure \
     --prefix="$HOME/ffmpeg_build" \
     --pkg-config-flags="--static" \
     --extra-cflags="-I$HOME/ffmpeg_build/include -I/usr/include -I/usr/local/include" \
@@ -168,33 +140,15 @@ function ffmpeg() {
   hash -r
 }
 
-function remove_compilations() {
-  sudo rm -rf ~/ffmpeg_build ~/bin/{ffmpeg,ffprobe,ffplay,x264,x265}
-}
-
-function purge() {
-  sudo rm -rf ~/ffmpeg_build ~/ffmpeg_sources ~/bin/{ffmpeg,ffprobe,ffplay,x264,x265,nasm,vsyasm,yasm,ytasm}
-  # sed -i '/ffmpeg_build/d' ~/.manpath
-  hash -r
-}
-
 function install() {
-  mkdir -p ~/ffmpeg_sources ~/bin
+  sudo rm -rf ~/ffmpeg_build ~/bin/{ffmpeg,ffprobe,ffplay,x264,x265,nasm,ndisasm}
+  mkdir -p ~/ffmpeg_sources ~/ffmpeg_build ~/bin $PKG_CONFIG_PATH
   pkg_deps
+  nv_deps
   nasm
-  yasm
   x264
   x265
-  others
   ffmpeg
 }
 
-function update() {
-  remove_compilations
-  pkg_deps
-  install
-}
-
-pkg_deps
-nv_deps
-update
+install
