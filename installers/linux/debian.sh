@@ -308,6 +308,13 @@ function install_python() {
   sudo make install
 }
 
+function install_gh() {
+  curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+  sudo apt update
+  sudo apt install gh
+}
+
 function install_cli_tools() {
   install_nerd_fonts
   install_fish
@@ -323,6 +330,7 @@ function bootstrap() {
   install_spacemacs
   install_chrome
   install_ergodox
+  install_gh
   install_alacritty
   install_brave
   echo "> Bootstrap complete!"
@@ -337,4 +345,3 @@ else
     *)              for i in "${@}"; do install_${i} ; done ;;
   esac
 fi
-
