@@ -30,7 +30,8 @@ function install_base() {
     parallel \
     cowsay fortune fortunes \
     locales build-essential yasm \
-    bash-completion
+    bash-completion \
+    pulseeffects lsp-plugins
 }
 
 
@@ -126,7 +127,22 @@ function install_alacritty() {
 
   cd alacritty
   cargo build --release
-    sudo cp -v target/release/alacritty /usr/local/bin/
+  sudo cp -v target/release/alacritty /usr/local/bin/
+
+  # Add Desktop Entry
+  sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+  sudo desktop-file-install extra/linux/Alacritty.desktop
+  sudo update-desktop-database
+
+  # Install man pages
+  sudo mkdir -p /usr/local/share/man/man1
+  gzip -c extra/alacritty.man | sudo tee /usr/local/share/man/man1/alacritty.1.gz > /dev/null
+  gzip -c extra/alacritty-msg.man | sudo tee /usr/local/share/man/man1/alacritty-msg.1.gz > /dev/null
+
+  # Install completions
+  mkdir -p ~/.bash_completion
+  cp extra/completions/alacritty.bash ~/.bash_completion/alacritty
+
   cd $HOME
   rm -rf /tmp/alacritty
 }

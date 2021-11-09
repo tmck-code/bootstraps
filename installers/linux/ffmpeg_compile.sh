@@ -136,7 +136,16 @@ function ffmpeg() {
     --enable-libnpp \
     --enable-nvenc
   make -j "$(nproc)"
-  sudo make -j "$(nproc)" install
+  make -j "$(nproc)" install
+  hash -r
+}
+
+function remove_compilations() {
+  sudo rm -rf ~/ffmpeg_build ~/bin/{ffmpeg,ffprobe,ffplay,x264,x265}
+}
+
+function purge() {
+  rm -rf ~/ffmpeg_build ~/ffmpeg_sources ~/bin/{ffmpeg,ffprobe,ffplay,x264,x265,nasm,vsyasm,yasm,ytasm}
   hash -r
 }
 
@@ -151,4 +160,10 @@ function install() {
   ffmpeg
 }
 
-install
+function update() {
+  remove_compilations
+  pkg_deps
+  install
+}
+
+update
