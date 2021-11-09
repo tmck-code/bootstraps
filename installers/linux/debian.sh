@@ -29,7 +29,8 @@ function install_base() {
     tmux htop iotop bmon sysstat \
     parallel \
     cowsay fortune fortunes \
-    locales build-essential yasm
+    locales build-essential yasm \
+    bash-completion
 }
 
 
