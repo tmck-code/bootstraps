@@ -280,5 +280,5 @@ case ${1:-} in
   "vscode" )        install_vscode ;;
   "balena_etcher" ) install_balena_etcher ;;
   "extras" )        extras ;;
-  "bootstrap"|* )   bootstrap ;;
+  "bootstrap" )     bootstrap ;;
 esac
