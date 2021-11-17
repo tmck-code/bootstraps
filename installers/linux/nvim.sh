@@ -4,6 +4,7 @@ set -euxo pipefail
 
 sudo apt update
 sudo apt purge -y neovim
+sudo apt install -y libtool automake cmake pkg-config gettext
 
 cd $HOME/dev
 
@@ -16,6 +17,7 @@ else
   cd neovim
 fi
 
-make CMAKE_BUILD_TYPE=Release -j $(nproc)
-sudo make CMAKE_INSTALL_PREFIX=$HOME/bin/nvim install -j $(nproc)
+make distclean
 
+make CMAKE_BUILD_TYPE=Release -j $(nproc)
+sudo make install -j $(nproc)
