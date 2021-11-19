@@ -25,13 +25,14 @@ function install_base() {
   echo "> Installing base OS packages"
   sudo apt-get update
   sudo apt-get install -y --no-install-recommends \
-    wget curl git tig tree \
+    wget curl git tig tree net-tools \
     tmux htop iotop bmon sysstat \
     parallel \
     cowsay fortune fortunes \
     locales build-essential yasm \
     bash-completion \
-    pulseeffects lsp-plugins
+    pulseeffects lsp-plugins \
+    jq silversearcher-ag shellcheck
 }
 
 
@@ -45,14 +46,14 @@ function install_pokesay() {
   sudo apt-get update
   sudo apt-get install -y cowsay fortune
 
-  if [ ! -f $HOME/bin/pokesay ]; then
+  if [ ! -f "$HOME/bin/pokesay" ]; then
     git clone --depth 1 http://github.com/tmck-code/pokesay
     (cd pokesay && ./install.sh)
   fi
 
-  if [ ! -f $HOME/bin/lolcat ]; then
+  if [ ! -f "$HOME/bin/lolcat" ]; then
     git clone --depth 1 https://github.com/jaseg/lolcat.git
-    (cd lolcat && make lolcat && cp ./lolcat $HOME/bin/)
+    (cd lolcat && make lolcat && cp ./lolcat "$HOME/bin/")
   fi
 
   rm -rf /tmp/pokesay /tmp/lolcat
@@ -83,7 +84,8 @@ function install_opera() {
 
 function install_ergodox() {
   sudo apt install -y libusb-dev # gtk+3.0 libwebkit2gtk-4.0 libusb-dev
-  local config=$(cat <<EOF
+  local config
+  config=$(cat <<EOF
 # Teensy rules for the Ergodox EZ
 ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", ENV{ID_MM_DEVICE_IGNORE}="1"
 ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789A]?", ENV{MTP_NO_PROBE}="1"
@@ -100,13 +102,13 @@ EOF
   cd /tmp/
   wget https://configure.ergodox-ez.com/wally/linux -O wally
   chmod +x wally
-  mv wally $HOME/bin
+  mv wally "$HOME/bin"
 }
 
 function install_rust() {
   if ! command -v rustup; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    source $HOME/.cargo/env
+    source "$HOME/.cargo/env"
     rustup override set stable
     rustup update stable
   fi
@@ -143,14 +145,14 @@ function install_alacritty() {
   mkdir -p ~/.bash_completion
   cp extra/completions/alacritty.bash ~/.bash_completion/alacritty
 
-  cd $HOME
+  cd "$HOME"
   rm -rf /tmp/alacritty
 }
 
 function install_steam() {
   echo "Installing steam"
   line_n=$(grep -n 'deb http://deb.debian.org/debian/ buster main$' /etc/apt/sources.list) || line_n=''
-  if [ ! -z "${line_n:-}" ]; then
+  if [ -n "${line_n:-}" ]; then
     sudo sed -i \
       "${line_n}s,deb http://deb.debian.org/debian/ buster main$,deb http://deb.debian.org/debian/ buster main contrib non-free,g" \
       /etc/apt/sources.list
@@ -190,6 +192,7 @@ function install_obs() {
   sudo make install -j "$(nproc)"
 }
 
+# My favourite shell... I think?
 function install_fish() {
   echo 'deb http://download.opensuse.org/repositories/shells:/fish:/release:/3/Debian_10/ /' \
     | sudo tee /etc/apt/sources.list.d/shells:fish:release:3.list
@@ -201,9 +204,35 @@ function install_fish() {
   sudo apt install -y fish
 }
 
-function install_z() {
-  rm -rf "$HOME/bin/z/"
-  git clone git@github.com:rupa/z.git "$HOME/bin/z/"
+# A cli tool for benchmarking things, like an improved /usr/bin/time
+function install_hyperfine() {
+  cd /tmp/
+  HYPERFINE_DEB=hyperfine-musl_1.12.0_amd64.deb
+  wget https://github.com/sharkdp/hyperfine/releases/download/v1.12.0/$HYPERFINE_DEB
+  sudo dpkg -i $HYPERFINE_DEB
+  rm $HYPERFINE_DEB
+}
+
+function nerd_font_paths() {
+  family="${1}"
+  family_html="${2}"
+  urls=(
+    "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/${family}/Regular/complete/${family_html}%20Nerd%20Font%20Complete.ttf"
+    "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/${family}/Bold/complete/${family_html}%20Bold%20Nerd%20Font%20Complete.ttf"
+    "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/${family}/Bold-Italic/complete/${family_html}%20Bold%20Italic%20Nerd%20Font%20Complete.ttf"
+    "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/${family}/Italic/complete/${family_html}%20Italic%20Nerd%20Font%20Complete.ttf"
+  )
+  echo ${urls[@]}
+}
+
+# These 4 are required by alacritty (regular/bold/bold-italic/italic)
+function install_nerd_fonts() {
+  for font in "Iosevka Iosevka" "VictorMono Victor%20Mono"; do
+    mkdir -p "$HOME/dev/fonts/${font}"
+    nerd_font_paths $(echo "${font}") | xargs -n1 wget -P "$HOME/dev/fonts/${font}"
+    ln -s "/usr/share/fonts/truetype/${font}" "$HOME/dev/fonts/${font}"
+  done
+  fc-cache
 }
 
 function install_spacemacs() {
@@ -240,7 +269,9 @@ function install_balena_etcher() {
 }
 
 function install_cli_tools() {
-  install_z
+  install_nerd_fonts
+  install_fish
+  install_hyperfine
 }
 
 function bootstrap() {
@@ -256,29 +287,13 @@ function bootstrap() {
   echo "> Bootstrap complete!"
 }
 
-function extras() {
-  install_fish
-  install_cli_tools
-}
+if [ -z "${1:-}" ]; then
+  bootstrap
+else
+  case ${1:-} in
+    "extras" )      extras ;;
+    "bootstrap" )   bootstrap ;;
+    *)              for i in "${@}"; do install_${i} ; done ;;
+  esac
+fi
 
-case ${1:-} in
-  "alacritty" )     install_alacritty ;;
-  "base" )          install_base ;;
-  "chrome" )        install_chrome ;;
-  "clean_slate" )   clean_slate ;;
-  "cli_tools" )     install_cli_tools ;;
-  "ergodox" )       install_ergodox ;;
-  "fish" )          install_fish ;;
-  "git" )           install_git ;;
-  "obs" )           install_obs ;;
-  "opera" )         install_opera ;;
-  "pokesay" )       install_pokesay ;;
-  "rust" )          install_rust ;;
-  "sbt" )           install_sbt ;;
-  "steam" )         install_steam ;;
-  "spacemacs" )     install_spacemacs ;;
-  "vscode" )        install_vscode ;;
-  "balena_etcher" ) install_balena_etcher ;;
-  "extras" )        extras ;;
-  "bootstrap" )     bootstrap ;;
-esac
