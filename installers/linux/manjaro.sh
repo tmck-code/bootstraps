@@ -2,9 +2,12 @@
 
 sudo pacman -Syu --noconfirm \
     git \
-    steam-manjaro linux-steam-integration \
+    obs-studio \
     vim \
     python3 python-pip \
     alacritty \
     tmux cowsay fortune-mod screenfetch \
-    ffmpeg
+    ffmpeg flatpak
+
+flatpak install flathub com.valvesoftware.Steam
+flatpak run com.valvesoftware.Steam
