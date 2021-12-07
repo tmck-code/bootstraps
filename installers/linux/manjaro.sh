@@ -3,36 +3,37 @@
 set -euo pipefail
 
 function deps() {
+  # Just in case, I often use /tmp/ for downloading/unzipping etc
+  sudo chown -R $USER:$USER /tmp/
   # Makes the package manager downloads 100x faster
   sudo pacman-mirrors --country Australia
 
   # Base dependencies
   sudo pacman -Syu --noconfirm \
-      git vim ffmpeg code docker docker-compose \
-      tmux cowsay lolcat fortune-mod screenfetch redshift nvtop \
+      git vim ffmpeg mpv docker docker-compose \
+      tmux cowsay lolcat fortune-mod redshift nvtop \
+      tree screenfetch hyperfine \
       pkgconf flatpak snapd \
       python3 python-pip \
-      obs-studio alacritty piper
-
-  sudo chown -R $USER:$USER /tmp/
+      obs-studio alacritty piper audacious gparted
+  python3 -m pip install bpytop ipython
 
   # pokesay-go
   bash -c "$(curl https://raw.githubusercontent.com/tmck-code/pokesay-go/master/scripts/install.sh)" bash linux amd64
 
-  python3 -m pip install bpytop
-
-  # Add user to the docker group
+  # docker
   sudo usermod -aG docker $USER
   sudo systemctl enable --now docker
+  # snap
   sudo systemctl enable --now snapd.socket
   sudo ln -s /var/lib/snapd/snap /snap
   export PATH="$PATH:/snap"
+  # vscode
   sudo snap install code --classic
 }
 
 
 function steam() {
-  # Steam
   # run with: flatpak run com.valvesoftware.Steam
   flatpak install flathub com.valvesoftware.Steam
   # Need this to be able to access another drive
