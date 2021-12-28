@@ -51,6 +51,14 @@ function google_chrome() {
   yay -S google-chrome
 }
 
+function pia() {
+  cd /tmp/
+  wget https://installers.privateinternetaccess.com/download/pia-linux-3.2-06857.run
+  chmod +x ./pia-linux-3.2-06857.run
+  sudo ./pia-linux-3.2-06857.run
+  rm ./pia-linux-3.2-06857.run
+}
+
 for i in "${@}"; do
   ${i}
 done
