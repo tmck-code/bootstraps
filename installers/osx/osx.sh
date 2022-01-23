@@ -13,11 +13,11 @@ else
 fi
 
 if [ $(which homebrew) ]; then
-  echo "- gh already installed, skipping"
+  echo "- homebrew already installed, skipping"
 else
   echo "- Installing homebrew"
   xcode-select --install
-  cd /usr/local/src && mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
+  cd /tmp/ && mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
 fi
 
 brew update
@@ -34,19 +34,21 @@ if [ -f $HOME/bin/pokesay ]; then
   echo "- pokesay already installed, skipping"
 else
   echo "- Installing pokesay"
-  cd /usr/local/src
+  cd /tmp/
   git clone --depth 1 http://github.com/tmck-code/pokesay
   (cd pokesay && ./install.sh)
+  rm -rf /tmp/pokesay
 fi
 
 if [ -f $HOME/bin/lolcat ]; then
   echo "- lolcat already installed, skipping"
 else
   echo "- Installing lolcat"
-  cd /usr/local/src
+  cd /tmp/
   # Install the "high-performance" lolcat
   git clone --depth 1 https://github.com/jaseg/lolcat.git
   (cd lolcat && make lolcat && cp ./lolcat $HOME/bin/)
+  rm -rf /tmp/lolcat
 fi
 
 if [ $(which gh) ]; then
