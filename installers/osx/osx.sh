@@ -55,3 +55,6 @@ else
   brew install github/gh/gh
   brew update && brew upgrade gh
 fi
+
+# Enable key repeating when holding down a singular key
+defaults write -g ApplePressAndHoldEnabled -bool false
