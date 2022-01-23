@@ -30,14 +30,11 @@ brew install \
 
 export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
 
-if [ -f $HOME/bin/pokesay ]; then
-  echo "- pokesay already installed, skipping"
+if [ -f $HOME/bin/pokesay-go ]; then
+  echo "- pokesay-go already installed, skipping"
 else
-  echo "- Installing pokesay"
-  cd /tmp/
-  git clone --depth 1 http://github.com/tmck-code/pokesay
-  (cd pokesay && ./install.sh)
-  rm -rf /tmp/pokesay
+  echo "- Installing pokesay-go"
+  bash -c "$(curl https://raw.githubusercontent.com/tmck-code/pokesay-go/master/scripts/install.sh)" bash darwin amd64
 fi
 
 if [ -f $HOME/bin/lolcat ]; then
