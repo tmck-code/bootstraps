@@ -61,7 +61,7 @@ function install_plugin() {
   repo=$(echo "${1}" | cut -d '/' -f 2)
   if [ ! -d "${repo}" ]; then
     echo -n "not installed, cloning... "
-    git clone --depth 1 "git@github.com:${1}" || echo "- vim plugin already exists: ${1}"
+    git clone --depth 1 "git@github.com:${1}" > /dev/null || echo "- vim plugin already exists: ${1}"
   else
     echo -n "already installed, updating... "
     (cd "${repo}" && git pull -q)
