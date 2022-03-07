@@ -16,7 +16,9 @@ tpope/vim-fugitive
 tpope/vim-sensible
 tpope/vim-surround
 vim-scripts/indentpython.vim
-vim-scripts/Align"
+vim-scripts/Align
+SirVer/ultisnips
+honza/vim-snippets"
 
 export aesthetic_repos="\
 ekalinin/Dockerfile.vim

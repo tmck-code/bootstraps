@@ -8,5 +8,11 @@ sudo apt install -y \
   openvpn \
   uuid-runtime
 
-curl https://www.privateinternetaccess.com/installer/pia-nm.sh | sudo bash
+cd /tmp/
+FNAME="pia-linux-3.1.2-06767.run"
+wget https://installers.privateinternetaccess.com/download/$FNAME
+chmod +x $FNAME
+sudo ls
+./$FNAME
+rm $FNAME
 
