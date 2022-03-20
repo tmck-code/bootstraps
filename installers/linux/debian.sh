@@ -268,6 +268,14 @@ function install_balena_etcher() {
   sudo apt-get install balena-etcher-electron
 }
 
+function install_z() {
+  mkdir -p $HOME/dev
+  cd $HOME/dev
+  git clone https://github.com/rupa/z.git
+
+  echo "source $HOME/dev/z/z.sh" >> $HOME/.bash_profile
+}
+
 function install_cli_tools() {
   install_nerd_fonts
   install_fish

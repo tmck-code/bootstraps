@@ -15,7 +15,8 @@ function deps() {
       tree screenfetch hyperfine \
       pkgconf flatpak snapd \
       python3 python-pip \
-      obs-studio alacritty piper audacious gparted
+      obs-studio alacritty piper audacious gparted \
+      xclip
   python3 -m pip install bpytop ipython
 
   # pokesay-go

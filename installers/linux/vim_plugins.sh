@@ -2,51 +2,53 @@
 
 set -euo pipefail
 
-export core_repos="\
-airblade/vim-gitgutter
-andrewradev/splitjoin.vim
-chrisbra/csv.vim
-ctrlpvim/ctrlp.vim
-dyng/ctrlsf.vim
-lifepillar/vim-mucomplete
-mechatroner/rainbow_csv
-ngmy/vim-rubocop
-ntpeters/vim-better-whitespace
-tpope/vim-fugitive
-tpope/vim-sensible
-tpope/vim-surround
-vim-scripts/indentpython.vim
-vim-scripts/Align
-SirVer/ultisnips
-honza/vim-snippets"
+export core_repos=(
+  airblade/vim-gitgutter
+  andrewradev/splitjoin.vim
+  chrisbra/csv.vim
+  ctrlpvim/ctrlp.vim
+  dyng/ctrlsf.vim
+  lifepillar/vim-mucomplete
+  mechatroner/rainbow_csv
+  ngmy/vim-rubocop
+  ntpeters/vim-better-whitespace
+  tpope/vim-fugitive
+  tpope/vim-sensible
+  tpope/vim-surround
+  vim-scripts/indentpython.vim
+  junegunn/vim-easy-align
+  vim-scripts/Align
+)
 
-export aesthetic_repos="\
-ekalinin/Dockerfile.vim
-fenetikm/falcon
-ftsamoyed/PinkCatBoo
-morhetz/gruvbox
-mxw/vim-jsx.git
-ntk148v/vim-horizon
-pangloss/vim-javascript
-paramagicdev/vim-medic_chalk
-rakr/vim-one
-rigellute/shades-of-purple.vim
-ryanoasis/vim-devicons
-scrooloose/nerdtree
-scrooloose/syntastic
-sickill/vim-monokai
-tiagofumo/vim-nerdtree-syntax-highlight
-vim-airline/vim-airline
-vim-airline/vim-airline-themes"
+export aesthetic_repos=(
+  ekalinin/Dockerfile.vim
+  fenetikm/falcon
+  ftsamoyed/PinkCatBoo
+  morhetz/gruvbox
+  mxw/vim-jsx.git
+  ntk148v/vim-horizon
+  pangloss/vim-javascript
+  paramagicdev/vim-medic_chalk
+  rakr/vim-one
+  rigellute/shades-of-purple.vim
+  ryanoasis/vim-devicons
+  scrooloose/nerdtree
+  scrooloose/syntastic
+  sickill/vim-monokai
+  tiagofumo/vim-nerdtree-syntax-highlight
+  vim-airline/vim-airline
+  vim-airline/vim-airline-themes
+)
 
-export nvim_repos="\
-deoplete-plugins/deoplete-jedi
-Shougo/deoplete.nvim"
+export nvim_repos=(
+  deoplete-plugins/deoplete-jedi
+  Shougo/deoplete.nvim
+)
 
 N_CONCURRENT_DOWNLOADS=2
 
 function install_pathogen() {
-  echo -e "\n* Installing Pathogen (plugin/plugin manager) -----------------"
+  echo -e "\n- Installing Pathogen (plugin/plugin manager)"
 
   [ ! -f "${HOME}/.vim/bundle" ] && mkdir -p "${HOME}/.vim/bundle"
 
@@ -59,13 +61,13 @@ function install_pathogen() {
 }
 
 function install_plugin() {
-  echo -n "- Installing vim plugin: ${1} ... "
+  echo -en "- Installing vim plugin: ${1}...\t"
   repo=$(echo "${1}" | cut -d '/' -f 2)
   if [ ! -d "${repo}" ]; then
     echo -n "not installed, cloning... "
     git clone --depth 1 "git@github.com:${1}" > /dev/null || echo "- vim plugin already exists: ${1}"
   else
-    echo -n "already installed, updating... "
+    echo -en "already installed, updating... \t"
     (cd "${repo}" && git pull -q)
   fi
   echo "complete"
@@ -74,14 +76,15 @@ export -f install_plugin
 
 function install_plugin_category() {
   cd "${HOME}/.vim/bundle"
-  echo -e "\n* Installing ${1} plugins -----------------------"
-  echo "${!1}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_plugin
+  echo -e "\n- Installing (${1} plugins)"
+
+  printf "%s\n" "${@}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_plugin
 }
 
 function install_all_plugins() {
   install_pathogen
-  install_plugin_category "core_repos"
-  install_plugin_category "aesthetic_repos"
+  install_plugin_category ${core_repos[@]}
+  install_plugin_category ${aesthetic_repos[@]}
 }
 export -f install_all_plugins
 
