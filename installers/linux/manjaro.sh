@@ -34,11 +34,17 @@ function deps() {
 }
 
 
-function steam() {
+function flatpak_steam() {
   # run with: flatpak run com.valvesoftware.Steam
   flatpak install flathub com.valvesoftware.Steam
   # Need this to be able to access another drive
   flatpak override --user --filesystem=/mnt/X/ com.valvesoftware.Steam
+}
+
+function doom_emacs() {
+  sudo pacman -Sy git emacs ripgrep fd
+  git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
+  ~/.emacs.d/bin/doom install
 }
 
 
