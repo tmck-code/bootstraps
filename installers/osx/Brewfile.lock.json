@@ -1,0 +1,67 @@
+{
+  "entries": {
+    "cask": {
+      "obs": {
+        "version": "27.1.3",
+        "options": {
+          "full_name": "obs"
+        }
+      }
+    },
+    "brew": {
+      "flux": {
+        "version": "0.151.0",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_monterey": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:c449474449f9d3d4b7f8762ceab04c9b0050b25732315622c808362c44115fa9",
+              "sha256": "c449474449f9d3d4b7f8762ceab04c9b0050b25732315622c808362c44115fa9"
+            },
+            "arm64_big_sur": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:99dbb19a2745746dc98be105f46022ee0ff5ef0d687a4fdb8c57facecd909a4c",
+              "sha256": "99dbb19a2745746dc98be105f46022ee0ff5ef0d687a4fdb8c57facecd909a4c"
+            },
+            "monterey": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:995415ac2e3f8b9424950a60b20165738616f07b3126aa7e59f880662ab9099c",
+              "sha256": "995415ac2e3f8b9424950a60b20165738616f07b3126aa7e59f880662ab9099c"
+            },
+            "big_sur": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:2b8ffa2653606b1a29fcde5b465a29ec5467dc567d50c45d39c56182abdc37f9",
+              "sha256": "2b8ffa2653606b1a29fcde5b465a29ec5467dc567d50c45d39c56182abdc37f9"
+            },
+            "catalina": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:e280dc5f79b975d99e362b003a8b2b1d23ff104aa58370ba9a2bc72e305474c0",
+              "sha256": "e280dc5f79b975d99e362b003a8b2b1d23ff104aa58370ba9a2bc72e305474c0"
+            },
+            "x86_64_linux": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:b80e3bb1155c1e30e19e56e9e8ef8d5cd971eeff55fe73b2acb339464009626a",
+              "sha256": "b80e3bb1155c1e30e19e56e9e8ef8d5cd971eeff55fe73b2acb339464009626a"
+            }
+          }
+        }
+      },
+      "obs": {
+      }
+    }
+  },
+  "system": {
+    "macos": {
+      "monterey": {
+        "HOMEBREW_VERSION": "3.3.11",
+        "HOMEBREW_PREFIX": "/opt/homebrew",
+        "Homebrew/homebrew-core": "bdc3ee9820351c4bc71f678239a491a29a41e3b1",
+        "CLT": "13.0.0.0.1.1627064638",
+        "Xcode": "13.1",
+        "macOS": "12.1"
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+cask "obs"
+
+brew "flux"
+brew "obs"
+
