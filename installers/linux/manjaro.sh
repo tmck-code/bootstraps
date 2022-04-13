@@ -47,6 +47,16 @@ function doom_emacs() {
   ~/.emacs.d/bin/doom install
 }
 
+function figlet() {
+  rm -rf /tmp/figlet
+  git clone git@github.com:xero/figlet-fonts.git /tmp/figlet-fonts/
+  sudo mv -v /tmp/figlet-fonts/* /usr/share/figlet/fonts/
+  rm -rf /tmp/figlet/
+}
+
+function etcher() {
+  sudo pacman -S etcher
+}
 
 function google_chrome() {
   sudo pacman -S --needed base-devel git
