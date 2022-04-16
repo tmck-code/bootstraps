@@ -11,7 +11,8 @@ function deps() {
   # Base dependencies
   sudo pacman -Syu --noconfirm \
       git vim ffmpeg mpv docker docker-compose \
-      tmux cowsay lolcat fortune-mod redshift nvtop \
+      tmux cowsay lolcat fortune-mod redshift \
+      nvtop dstat net-tools \
       tree screenfetch hyperfine \
       pkgconf flatpak snapd \
       python3 python-pip \
@@ -31,6 +32,14 @@ function deps() {
   export PATH="$PATH:/snap"
   # vscode
   sudo snap install code --classic
+}
+
+function yay() {
+  cd /tmp/
+  git clone https://aur.archlinux.org/yay-git.git
+  cd yay-git
+  makepkg -si
+  rm -rf yay-git
 }
 
 
