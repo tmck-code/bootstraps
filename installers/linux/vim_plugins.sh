@@ -8,6 +8,8 @@ export core_repos=(
   chrisbra/csv.vim
   ctrlpvim/ctrlp.vim
   dyng/ctrlsf.vim
+  fatih/vim-go
+  junegunn/vim-easy-align
   lifepillar/vim-mucomplete
   mechatroner/rainbow_csv
   ngmy/vim-rubocop
@@ -15,9 +17,8 @@ export core_repos=(
   tpope/vim-fugitive
   tpope/vim-sensible
   tpope/vim-surround
-  vim-scripts/indentpython.vim
-  junegunn/vim-easy-align
   vim-scripts/Align
+  vim-scripts/indentpython.vim
 )
 
 export aesthetic_repos=(
