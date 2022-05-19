@@ -25,7 +25,19 @@ function install_launcher_debian() {
   rm Minecraft.deb
 }
 
-# function install_optifine() { }
+function install_optifine() {
+  java -jar "$OPTIFINE_JAR"
+}
+
+function install_mods() {
+  mkdir -p "$HOME/.minecraft/mods/"
+  cp -Rv "${MINECRAFT_MODS_DIR}" "$HOME/.minecraft/mods/"
+}
+
+function install_shaders() {
+  mkdir -p "$HOME/.minecraft/shaderpacks/"
+  cp -Rv "${MINECRAFT_SHADERS_DIR}" "$HOME/.minecraft/shaderpacks/"
+}
 
 function install_fabric() {
   cd /tmp
