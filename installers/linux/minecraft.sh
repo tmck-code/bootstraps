@@ -31,12 +31,12 @@ function install_optifine() {
 
 function install_mods() {
   mkdir -p "$HOME/.minecraft/mods/"
-  cp -Rv "${MINECRAFT_MODS_DIR}" "$HOME/.minecraft/mods/"
+  find "${MINECRAFT_MODS_DIR}" -iname "*.jar" -exec cp -v {} "$HOME/.minecraft/mods/" \;
 }
 
 function install_shaders() {
   mkdir -p "$HOME/.minecraft/shaderpacks/"
-  cp -Rv "${MINECRAFT_SHADERS_DIR}" "$HOME/.minecraft/shaderpacks/"
+  find "${MINECRAFT_SHADERS_DIR}" -iname "*.zip" -exec cp -v {} "$HOME/.minecraft/shaderpacks/" \;
 }
 
 function install_fabric() {
