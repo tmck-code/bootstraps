@@ -63,6 +63,17 @@ function figlet() {
   rm -rf /tmp/figlet/
 }
 
+function cli_visualizations() {
+  sudo pacman -S fftw ncurses cmake
+  rm -rf /tmp/cli-visualizer
+  git clone git@github.com:dpayne/cli-visualizer.git /tmp/cli-visualizer
+
+  /tmp/cli-visualizer/install.sh
+  rm -rf /tmp/cli-visualizer
+
+  file /usr/local/bin/vis
+}
+
 function etcher() {
   sudo pacman -S etcher
 }
