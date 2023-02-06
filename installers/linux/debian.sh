@@ -290,6 +290,27 @@ function install_z() {
   echo "source $HOME/dev/z/z.sh" >> $HOME/.bash_profile
 }
 
+function install_python() {
+  local version
+  version=${PYTHON_VERSION:-3.11.1}
+  sudo apt install -y \
+    build-essential libbz2-dev libc6-dev libffi-dev libgdbm-dev libncurses5-dev \
+    libncursesw5-dev libnss3-dev libreadline-dev libsqlite3-dev libssl-dev \
+    tk-dev zlib1g-dev
+
+  cd $HOME/dev
+  wget https://www.python.org/ftp/python/${version}/Python-${version}.tgz
+  tar xzf Python-${version}.tgz
+  rm Python-${version}.tgz
+
+  cd Python-${version}
+
+  ./configure --enable-optimizations
+  make -j $(nproc)
+  make -j $(nproc) test
+  sudo make install
+}
+
 function install_cli_tools() {
   install_nerd_fonts
   install_fish
