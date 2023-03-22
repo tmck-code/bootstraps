@@ -11,7 +11,7 @@ cd ~/dev
 cd bootstraps
 
 ./installers/dotfiles.sh
-# ./installers/linux/debian.sh
+./installers/linux/debian.sh
 # ./installers/linux/docker.sh
 # ./installers/linux/vim_full.sh
 # ./installers/linux/ffmpeg_compile.sh
