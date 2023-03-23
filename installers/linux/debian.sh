@@ -41,22 +41,8 @@ function install_base() {
 # - "high-performance" lolcat
 function install_pokesay() {
   echo "> Installing pokesay tools for .bashrc"
-  cd /tmp
 
-  sudo apt-get update
-  sudo apt-get install -y cowsay fortune
-
-  if [ ! -f "$HOME/bin/pokesay" ]; then
-    git clone --depth 1 http://github.com/tmck-code/pokesay
-    (cd pokesay && ./install.sh)
-  fi
-
-  if [ ! -f "$HOME/bin/lolcat" ]; then
-    git clone --depth 1 https://github.com/jaseg/lolcat.git
-    (cd lolcat && make lolcat && cp ./lolcat "$HOME/bin/")
-  fi
-
-  rm -rf /tmp/pokesay /tmp/lolcat
+  bash -c "$(curl https://raw.githubusercontent.com/tmck-code/pokesay/master/build/scripts/install.sh)" bash linux amd64
 }
 
 function install_vscode() {
@@ -327,6 +313,7 @@ function bootstrap() {
   install_chrome
   install_ergodox
   install_alacritty
+  install_brave
   echo "> Bootstrap complete!"
 }
 
