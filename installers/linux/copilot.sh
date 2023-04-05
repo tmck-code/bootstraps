@@ -14,3 +14,6 @@ echo "- installing for vscode"
 code --install-extension GitHub.copilot
 
 echo "! run :Copilot setup & :Copilot enable when in vim/nvim"
+
+echo "- installing nodejs"
+sudo apt install -y nodejs
