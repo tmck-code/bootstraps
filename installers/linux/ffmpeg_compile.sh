@@ -2,7 +2,7 @@
 
 set -euxo pipefail
 
-CUDA_OS=ubuntu2004
+CUDA_OS=debian11
 CUDA_VERSION_MAJOR=11.5
 CUDA_VERSION=11.5.0
 NVIDIA_DRIVER_VERSION=495.29.05
@@ -27,14 +27,12 @@ function pkg_deps() {
 }
 
 function older_than_a_week() {
-  return 1
   if [ ! -d $1 ]; then
-    echo "- $1 does not exist, installing"
-    return 1
+    # $1 does not exist, installing"
+    return 0
   fi
   age=$[ $[ $(date +%s) - $(date -r "${1}" +%s) ] / 60 / 60 / 24 ]
 
-  echo "- $1 is $age days old"
   (( "$age" > 7 )) && return 0 || return 1
 }
 
@@ -72,6 +70,7 @@ function nv_deps() {
   if [[ $(sudo apt show cuda 2> /dev/null) ]]; then
     sudo apt update
     sudo apt upgrade -y
+    sudo apt-get -y install cuda
   else
     wget https://developer.download.nvidia.com/compute/cuda/repos/$CUDA_OS/x86_64/cuda-$CUDA_OS.pin
     sudo mv cuda-$CUDA_OS.pin /etc/apt/preferences.d/cuda-repository-pin-600
