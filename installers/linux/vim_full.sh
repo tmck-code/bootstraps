@@ -2,20 +2,18 @@
 
 set -euxo pipefail
 
-PLUGIN_SCRIPT="${PWD}/installers/linux/vim_plugins.sh"
+PLUGIN_SCRIPT="$PWD/installers/linux/vim_plugins.sh"
 WEEK=604800
-
-current_version="$(apt show -a vim)"
 
 if [ -f /usr/local/bin/vim ]; then
   current_version_date=$(stat -c %Y /usr/local/bin/vim)
 
-  if [ -n $current_version_date ]; then
+  if [ -n "$current_version_date" ]; then
     todays_date=$(date +%s)
-    days_since_update="$(( $todays_date - $current_version_date ))"
+    days_since_update="$(( todays_date - current_version_date ))"
     if [ $days_since_update -lt $WEEK ]; then
       echo "Installed version is recent enough, skipping compilation"
-      ./${0%/*}/vim_plugins.sh
+      "./${0%/*}/vim_plugins.sh"
       exit 0
     fi
   fi
@@ -43,7 +41,7 @@ fi
 
 echo '> Configure vim8'
 cd ./vim
-LD_FLAGS="-Wl,-rpath=${HOME}/.pyenv/versions/3.4.0/lib" \
+LD_FLAGS="-Wl,-rpath=$HOME/.pyenv/versions/3.4.0/lib" \
   ./configure \
     --enable-cscope \
     --enable-fail-if-missing \
@@ -55,12 +53,12 @@ LD_FLAGS="-Wl,-rpath=${HOME}/.pyenv/versions/3.4.0/lib" \
     --with-features=huge
 
 n_proc=$(nproc --all)
-make -j "${n_proc}"
-sudo make -j "${n_proc}" install
+make -j "$n_proc"
+sudo make -j "$n_proc" install
 
-sudo ln -s /usr/local/bin/vim /usr/bin/vim
+sudo ln -sf /usr/local/bin/vim /usr/bin/vim
 
-${PLUGIN_SCRIPT}
+$PLUGIN_SCRIPT
 
-chown -R "${USER}:${USER}" "${HOME}/.vim/"
+chown -R "$USER:$USER" "$HOME/.vim/"
 
