@@ -17,9 +17,14 @@ fi
 echo "- installing for vscode"
 code --install-extension GitHub.copilot
 
+# nodejs needs to be version v16+
 echo "- installing nodejs"
-# nodejs needs to be version v16+, debian bullseye only ships with v12
-curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash - && \
-  sudo apt install -y nodejs
+if [ -f /etc/redhat-release ]; then
+  sudo dnf install -y nodejs20
+else
+  # debian bullseye only ships with v12
+  curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash - && \
+    sudo apt install -y nodejs
+fi
 
 echo "! run :Copilot setup & :Copilot enable when in vim/nvim"
