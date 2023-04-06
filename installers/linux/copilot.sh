@@ -20,7 +20,7 @@ code --install-extension GitHub.copilot
 # nodejs needs to be version v16+
 echo "- installing nodejs"
 if [ -f /etc/redhat-release ]; then
-  sudo dnf install -y nodejs20
+  sudo dnf install -y nodejs
 else
   # debian bullseye only ships with v12
   curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash - && \
