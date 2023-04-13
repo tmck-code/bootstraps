@@ -20,7 +20,7 @@ function base() {
   sudo dnf upgrade -y
 
   sudo dnf install -y \
-    ncurses ncurses-devel redshift \
+    ncurses ncurses-devel redshift wl-clipboard \
     fish tmux fortune-mod \
     python3-pip python3-devel \
     bmon htop nvtop sysstat vim git curl wget \
@@ -41,6 +41,23 @@ function vscode() {
   sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
   dnf check-update
   sudo dnf install code -y
+}
+
+function docker() {
+  sudo dnf remove -y docker* containerd.io
+
+  sudo dnf -y install dnf-plugins-core
+  sudo dnf config-manager \
+      --add-repo \
+      https://download.docker.com/linux/fedora/docker-ce.repo
+
+  sudo dnf install -y \
+    docker-ce docker-ce-cli \
+    containerd.io docker-buildx-plugin \
+    docker-compose-plugin
+
+  sudo usermod -aG docker $USER
+  sudo systemctl start docker
 }
 
 function bootstrap() {
