@@ -168,11 +168,15 @@ function install_obs() {
     libxcomposite-dev libxinerama-dev libxss-dev pkg-config python3-dev qtbase5-dev \
     qtbase5-private-dev qtwayland5 swig
 
+  cd $HOME/dev
   wget https://cdn-fastly.obsproject.com/downloads/cef_binary_4280_linux64.tar.bz2
   tar -xjf ./cef_binary_4280_linux64.tar.bz2
+
+  [ -f obs-studio ] && rm -rf obs-studio
   git clone --recursive https://github.com/obsproject/obs-studio.git
+
   cd obs-studio
-  mkdir build && cd build
+  mkdir -p build && cd build
   cmake -DUNIX_STRUCTURE=1 -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_BROWSER=ON -DCEF_ROOT_DIR="../../cef_binary_4280_linux64" ..
   make -j "$(nproc)"
   sudo make install -j "$(nproc)"
@@ -266,6 +270,13 @@ function install_balena_etcher() {
      | sudo -E bash
   sudo apt-get update
   sudo apt-get install balena-etcher-electron
+}
+
+function install_obsidian() {
+  cd /tmp/
+  wget https://github.com/obsidianmd/obsidian-releases/releases/download/v1.1.16/obsidian_1.1.16_amd64.deb
+  sudo dpkg -i obsidian_1.1.16_amd64.deb
+  rm obsidian_1.1.16_amd64.deb
 }
 
 function install_z() {
