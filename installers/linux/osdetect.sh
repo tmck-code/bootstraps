@@ -6,14 +6,6 @@ function debug_echo() {
   test -v DEBUG && echo "→ $*" || return 0
 }
 
-function check_mint() {
-  if grep -q -e 'Linux Mint' -e 'LMDE' /etc/lsb-release; then
-    return 0
-  else
-    return 1
-  fi
-}
-
 function detect_os() {
   method="${1:-os-release}"
   debug_echo "using method ${method} to detect os"
@@ -44,8 +36,17 @@ function wrap_and_exit() {
   fi
 }
 
+function check_os() {
+  local os="${1:-}"
+  if detect_os "${2:-os-release}" | grep -qi "${os}" ; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 case "${1:-}" in
-  "mint" ) wrap_and_exit check_mint ;;
+  "mint" ) wrap_and_exit check_os mint ;;
   "version" ) detect_debian_version "${2:-apt}" ;;
   "os" ) detect_os "${2:-os-release}" ;;
   * ) echo "usage: $0 mint|version" && exit 1 ;;
