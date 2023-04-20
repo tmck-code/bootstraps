@@ -35,6 +35,7 @@ function create_or_update_fonts_repository() {
 }
 
 echo "⌛installing fonts: $fonts"
+create_or_update_fonts_repository
 for font in $fonts; do
   install_font "$font"
 done

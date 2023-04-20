@@ -6,12 +6,16 @@ function debug_echo() {
   test -v DEBUG && echo "→ $*" || return 0
 }
 
+function get_os_release_id() {
+  grep -i '^ID=' /etc/os-release | cut -d= -f 2
+}
+
 function detect_os() {
   method="${1:-os-release}"
   debug_echo "using method ${method} to detect os"
 
   case $method in
-    "os-release" ) grep -i '^ID=' /etc/os-release | cut -d= -f 2 ;;
+    "os-release" ) get_os_release_id ;;
     * ) echo "unsupported detect method: ${method}" && exit 1 ;;
   esac
 }
