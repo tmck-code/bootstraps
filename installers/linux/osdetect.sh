@@ -49,9 +49,11 @@ function check_os() {
   fi
 }
 
-case "${1:-}" in
-  "mint" ) wrap_and_exit check_os mint ;;
-  "version" ) detect_debian_version "${2:-apt}" ;;
-  "os" ) detect_os "${2:-os-release}" ;;
-  * ) echo "usage: $0 mint|version" && exit 1 ;;
-esac
+if ! (return 0 2>/dev/null) ; then
+  case "${1:-}" in
+    "mint" ) wrap_and_exit check_os mint ;;
+    "version" ) detect_debian_version "${2:-apt}" ;;
+    "os" ) detect_os "${2:-os-release}" ;;
+    * ) echo "usage: $0 mint|version" && exit 1 ;;
+  esac
+fi

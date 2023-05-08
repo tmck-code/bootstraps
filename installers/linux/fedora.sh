@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -euxo pipefail
 
 PS1_bold='\e[1m'
 PS1_green='\e[1;32m'
@@ -15,13 +15,13 @@ function print_success() {
 }
 
 function base() {
-  dnf check-update
+  dnf check-update || echo 'updated'
   sudo dnf remove -y libreoffice* thunderbird*
   sudo dnf upgrade -y
 
   sudo dnf install -y \
     ncurses ncurses-devel redshift wl-clipboard \
-    fish tmux fortune-mod \
+    fish tmux fortune-mod bash-completion the_silver_searcher \
     python3-pip python3-devel \
     bmon htop nvtop sysstat vim git curl wget \
     steam
