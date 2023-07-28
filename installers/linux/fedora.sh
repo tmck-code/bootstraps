@@ -28,13 +28,27 @@ function base() {
 
   # install pokesay
   bash -c "$(curl https://raw.githubusercontent.com/tmck-code/pokesay/master/build/scripts/install.sh)" bash linux amd64
+  # install rhythmbox
+  install_rhythmbox
 }
 
-function browsers() {
+function install_rhythmbox() {
+  # Install rhythmbox and the dark theme
+
+  sudo dnf install -y rhythmbox yaru-gtk4-theme
+  # Copy the regular .desktop file to the user's local dir
+  cp /usr/share/applications/org.gnome.Rhythmbox3.desktop ~/.local/share/applications/
+  # Wrap the usual rhythmbox in a bash -c to be able to se the theme - `GTK_THEME=Yaru:dark rhythmbox`
+  sed -i \
+    's/Exec=rhythmbox %U/Exec=bash -c "GTK_THEME=Yaru:dark rhythmbox %U"/g' \
+    ~/.local/share/applications/org.gnome.Rhythmbox3.desktop
+}
+
+function install_browsers() {
   sudo dnf install -y google-chrome-stable brave-browser
 }
 
-function vscode() {
+function install_vscode() {
   dnf list code && return
 
   sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
@@ -43,7 +57,7 @@ function vscode() {
   sudo dnf install code -y
 }
 
-function docker() {
+function install_docker() {
   sudo dnf remove -y docker* containerd.io
 
   sudo dnf -y install dnf-plugins-core
@@ -62,13 +76,13 @@ function docker() {
 
 function bootstrap() {
   echo -e "> bootstrapping fedora...\n"
-  for i in base browsers vscode; do install $i; done
+  for i in base browsers vscode; do install install_$i; done
   print_success "bootstrap complete!"
 }
 
 function install() {
   print_installing "$1"
-  $1
+  install_$1
   print_success "$1"
 }
 
