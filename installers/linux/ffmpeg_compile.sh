@@ -23,7 +23,21 @@ function pkg_deps() {
     libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev \
     pkg-config texinfo wget yasm zlib1g-dev \
     libgnutls28-dev libvpx-dev libmp3lame-dev libopus-dev \
-    libunistring-dev
+    libunistring-dev libnuma-dev freetype-devel
+}
+
+function pkg_deps_fedora() {
+  sudo dnf update
+  sudo dnf install -y \
+    ninja-build meson git libtool cmake \
+    libtool \
+    libssh-devel openssl-devel \
+    libva-devel libvdpau-devel libvorbis-devel \
+    libxcb-devel \
+    pkg-config texinfo wget yasm zlib-devel \
+    gnutls-devel libvpx-devel libopusenc-devel lame-devel \
+    libunistring-devel numactl-devel \
+    svt-av1-devel libass-devel libaom-devel
 }
 
 function older_than_a_week() {
@@ -79,6 +93,19 @@ function nv_deps() {
     sudo apt-get update
     sudo apt-get -y install cuda
   fi
+}
+
+function nv_deps_fedora() {
+  return
+  local distro=fedora37
+  sudo dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/$distro/x86_64/cuda-$distro.repo
+  sudo dnf clean expire-cache
+  # sudo dnf module install nvidia-driver:latest-dkms
+  # sudo dnf install cuda
+  sudo dnf --disablerepo="rpmfusion-nonfree*" install -y cuda
+  sudo dnf install -y cuda-nvcc-12-1 nv-codec-headers
+
+  sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 }
 
 function x264() {
