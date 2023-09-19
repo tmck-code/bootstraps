@@ -4,15 +4,15 @@ set -euo pipefail
 
 function detect_os() {
   for os in ubuntu debian; do
-    grep -qi "$os" /etc/lsb-release && echo "$os" && return 0
+    grep -qi "$os" /etc/os-release && echo "$os" && return 0
   done
 }
 
 function install_debian() {
-  line_n=$(grep -n 'deb http://deb.debian.org/debian/ buster main$' /etc/apt/sources.list) || line_n=''
+  line_n=$(grep -n 'deb http://deb.debian.org/debian/ bookworm main non-free-firmware$' /etc/apt/sources.list) || line_n=''
   if [ ! -z "${line_n:-}" ]; then
     sudo sed -i \
-      "${line_n}s,deb http://deb.debian.org/debian/ buster main$,deb http://deb.debian.org/debian/ buster main contrib non-free,g" \
+      "${line_n}s,deb http://deb.debian.org/debian/ bookworm main$,deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware,g" \
       /etc/apt/sources.list
   fi
 
@@ -25,7 +25,8 @@ function install_debian() {
     mesa-vulkan-drivers:i386 \
     libgl1-mesa-dri:i386
 
-  sudo apt install -y -t buster-backports nvidia-driver-libs:i386
+  # sudo apt install -y -t buster-backports nvidia-driver-libs:i386
+  sudo apt install -y nvidia-driver-libs:i386
 }
 
 function install_ubuntu() {
