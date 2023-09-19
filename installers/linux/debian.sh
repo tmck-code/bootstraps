@@ -274,9 +274,9 @@ function install_balena_etcher() {
 
 function install_obsidian() {
   cd /tmp/
-  wget https://github.com/obsidianmd/obsidian-releases/releases/download/v1.1.16/obsidian_1.1.16_amd64.deb
-  sudo dpkg -i obsidian_1.1.16_amd64.deb
-  rm obsidian_1.1.16_amd64.deb
+  wget https://github.com/obsidianmd/obsidian-releases/releases/download/v1.4.13/obsidian_1.4.13_amd64.deb
+  sudo dpkg -i obsidian_1.4.13_amd64.deb
+  rm obsidian_1.4.13_amd64.deb
 }
 
 function install_z() {
