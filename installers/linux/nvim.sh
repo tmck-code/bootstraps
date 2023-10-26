@@ -21,3 +21,8 @@ make distclean
 
 make CMAKE_BUILD_TYPE=Release -j $(nproc)
 sudo make install -j $(nproc)
+
+mkdir -p ~/.config/nvim
+cp -Rv ~/.vim/bundle ~/.config/nvim
+cp -Rv ~/.vim/autoload ~/.config/nvim
+cp ~/.vimrc ~/.config/nvim/init.vim
