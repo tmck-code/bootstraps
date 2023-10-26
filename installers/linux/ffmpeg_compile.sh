@@ -86,10 +86,11 @@ function nv_deps() {
     sudo apt upgrade -y
     sudo apt-get -y install cuda
   else
-    wget https://developer.download.nvidia.com/compute/cuda/repos/$CUDA_OS/x86_64/cuda-$CUDA_OS.pin
-    sudo mv cuda-$CUDA_OS.pin /etc/apt/preferences.d/cuda-repository-pin-600
-    sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$CUDA_OS/x86_64/7fa2af80.pub
-    sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/$CUDA_OS/x86_64/ /"
+    sudo apt-key del 7fa2af80
+
+    wget https://developer.download.nvidia.com/compute/cuda/repos/$CUDA_OS/x86_64/cuda-keyring_1.0-1_all.deb
+    sudo dpkg -i cuda-keyring_1.0-1_all.deb
+
     sudo apt-get update
     sudo apt-get -y install cuda
   fi
@@ -218,8 +219,8 @@ function ffmpeg() {
   ./configure \
     --prefix="$HOME/ffmpeg_build" \
     --pkg-config-flags="--static" \
-    --extra-cflags="-I$HOME/ffmpeg_build/include -I/usr/include -I/usr/local/include -I/usr/local/cuda-11.5/include" \
-    --extra-ldflags="-L$HOME/ffmpeg_build/lib -L/usr/local/lib -L/usr/local/cuda-11.5/lib64" \
+    --extra-cflags="-I$HOME/ffmpeg_build/include -I/usr/include -I/usr/local/include -I/usr/local/cuda-12.1/include" \
+    --extra-ldflags="-L$HOME/ffmpeg_build/lib -L/usr/local/lib -L/usr/local/cuda-12.1/lib64" \
     --nvccflags="-gencode arch=compute_52,code=sm_52 -O2" \
     --extra-libs="-lpthread -lm -lz" \
     --ld="g++" \
