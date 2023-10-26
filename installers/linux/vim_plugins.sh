@@ -19,6 +19,7 @@ export core_repos=(
   tpope/vim-surround
   vim-scripts/Align
   vim-scripts/indentpython.vim
+  ms-jpq/chadtree
 )
 
 export aesthetic_repos=(
@@ -36,6 +37,7 @@ export aesthetic_repos=(
   scrooloose/nerdtree
   scrooloose/syntastic
   sickill/vim-monokai
+  rafalbromirski/vim-aurora
   tiagofumo/vim-nerdtree-syntax-highlight
   vim-airline/vim-airline
   vim-airline/vim-airline-themes
