@@ -14,7 +14,7 @@ function print_success() {
   echo -e "${PS1_green}> ${1} complete!${PS1_reset}"
 }
 
-function base() {
+function install_base() {
   dnf check-update || echo 'updated'
   sudo dnf remove -y libreoffice* thunderbird*
   sudo dnf upgrade -y
@@ -45,7 +45,8 @@ function install_rhythmbox() {
 }
 
 function install_browsers() {
-  sudo dnf install -y google-chrome-stable brave-browser
+  sudo dnf install -y google-chrome-stable
+  #  brave-browser
 }
 
 function install_vscode() {
@@ -76,7 +77,7 @@ function install_docker() {
 
 function bootstrap() {
   echo -e "> bootstrapping fedora...\n"
-  for i in base browsers vscode; do install install_$i; done
+  for i in base browsers vscode; do install $i; done
   print_success "bootstrap complete!"
 }
 
