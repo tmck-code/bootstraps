@@ -19,7 +19,6 @@ export core_repos=(
   tpope/vim-surround
   vim-scripts/Align
   vim-scripts/indentpython.vim
-  ms-jpq/chadtree
 )
 
 export aesthetic_repos=(
@@ -44,8 +43,8 @@ export aesthetic_repos=(
 )
 
 export nvim_repos=(
-  deoplete-plugins/deoplete-jedi
-  Shougo/deoplete.nvim
+  marko-cerovac/material.nvim
+  nvim-treesitter/nvim-treesitter
 )
 
 N_CONCURRENT_DOWNLOADS=2
