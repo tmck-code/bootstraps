@@ -23,7 +23,21 @@ function pkg_deps() {
     libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev \
     pkg-config texinfo wget yasm zlib1g-dev \
     libgnutls28-dev libvpx-dev libmp3lame-dev libopus-dev \
-    libunistring-dev
+    libunistring-dev libnuma-dev freetype-devel
+}
+
+function pkg_deps_fedora() {
+  sudo dnf update
+  sudo dnf install -y \
+    ninja-build meson git libtool cmake \
+    libtool \
+    libssh-devel openssl-devel \
+    libva-devel libvdpau-devel libvorbis-devel \
+    libxcb-devel \
+    pkg-config texinfo wget yasm zlib-devel \
+    gnutls-devel libvpx-devel libopusenc-devel lame-devel \
+    libunistring-devel numactl-devel \
+    svt-av1-devel libass-devel libaom-devel
 }
 
 function older_than_a_week() {
@@ -72,13 +86,27 @@ function nv_deps() {
     sudo apt upgrade -y
     sudo apt-get -y install cuda
   else
-    wget https://developer.download.nvidia.com/compute/cuda/repos/$CUDA_OS/x86_64/cuda-$CUDA_OS.pin
-    sudo mv cuda-$CUDA_OS.pin /etc/apt/preferences.d/cuda-repository-pin-600
-    sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$CUDA_OS/x86_64/7fa2af80.pub
-    sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/$CUDA_OS/x86_64/ /"
+    sudo apt-key del 7fa2af80
+
+    wget https://developer.download.nvidia.com/compute/cuda/repos/$CUDA_OS/x86_64/cuda-keyring_1.0-1_all.deb
+    sudo dpkg -i cuda-keyring_1.0-1_all.deb
+
     sudo apt-get update
     sudo apt-get -y install cuda
   fi
+}
+
+function nv_deps_fedora() {
+  return
+  local distro=fedora37
+  sudo dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/$distro/x86_64/cuda-$distro.repo
+  sudo dnf clean expire-cache
+  # sudo dnf module install nvidia-driver:latest-dkms
+  # sudo dnf install cuda
+  sudo dnf --disablerepo="rpmfusion-nonfree*" install -y cuda
+  sudo dnf install -y cuda-nvcc-12-1 nv-codec-headers
+
+  sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 }
 
 function x264() {
@@ -191,8 +219,8 @@ function ffmpeg() {
   ./configure \
     --prefix="$HOME/ffmpeg_build" \
     --pkg-config-flags="--static" \
-    --extra-cflags="-I$HOME/ffmpeg_build/include -I/usr/include -I/usr/local/include -I/usr/local/cuda-11.5/include" \
-    --extra-ldflags="-L$HOME/ffmpeg_build/lib -L/usr/local/lib -L/usr/local/cuda-11.5/lib64" \
+    --extra-cflags="-I$HOME/ffmpeg_build/include -I/usr/include -I/usr/local/include -I/usr/local/cuda-12.1/include" \
+    --extra-ldflags="-L$HOME/ffmpeg_build/lib -L/usr/local/lib -L/usr/local/cuda-12.1/lib64" \
     --nvccflags="-gencode arch=compute_52,code=sm_52 -O2" \
     --extra-libs="-lpthread -lm -lz" \
     --ld="g++" \

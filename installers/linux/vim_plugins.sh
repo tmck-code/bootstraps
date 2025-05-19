@@ -33,14 +33,15 @@ export aesthetic_repos=(
   scrooloose/nerdtree
   scrooloose/syntastic
   sickill/vim-monokai
+  rafalbromirski/vim-aurora
   tiagofumo/vim-nerdtree-syntax-highlight
   vim-airline/vim-airline
   vim-airline/vim-airline-themes
 )
 
 export nvim_repos=(
-  deoplete-plugins/deoplete-jedi
-  Shougo/deoplete.nvim
+  marko-cerovac/material.nvim
+  nvim-treesitter/nvim-treesitter
 )
 
 N_CONCURRENT_DOWNLOADS=2

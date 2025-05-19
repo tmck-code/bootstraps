@@ -168,11 +168,15 @@ function install_obs() {
     libxcomposite-dev libxinerama-dev libxss-dev pkg-config python3-dev qtbase5-dev \
     qtbase5-private-dev qtwayland5 swig
 
+  cd $HOME/dev
   wget https://cdn-fastly.obsproject.com/downloads/cef_binary_4280_linux64.tar.bz2
   tar -xjf ./cef_binary_4280_linux64.tar.bz2
+
+  [ -f obs-studio ] && rm -rf obs-studio
   git clone --recursive https://github.com/obsproject/obs-studio.git
+
   cd obs-studio
-  mkdir build && cd build
+  mkdir -p build && cd build
   cmake -DUNIX_STRUCTURE=1 -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_BROWSER=ON -DCEF_ROOT_DIR="../../cef_binary_4280_linux64" ..
   make -j "$(nproc)"
   sudo make install -j "$(nproc)"
@@ -268,6 +272,13 @@ function install_balena_etcher() {
   sudo apt-get install balena-etcher-electron
 }
 
+function install_obsidian() {
+  cd /tmp/
+  wget https://github.com/obsidianmd/obsidian-releases/releases/download/v1.4.13/obsidian_1.4.13_amd64.deb
+  sudo dpkg -i obsidian_1.4.13_amd64.deb
+  rm obsidian_1.4.13_amd64.deb
+}
+
 function install_z() {
   mkdir -p $HOME/dev
   cd $HOME/dev
@@ -297,6 +308,13 @@ function install_python() {
   sudo make install
 }
 
+function install_gh() {
+  curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+  sudo apt update
+  sudo apt install gh
+}
+
 function install_cli_tools() {
   install_nerd_fonts
   install_fish
@@ -312,6 +330,7 @@ function bootstrap() {
   install_spacemacs
   install_chrome
   install_ergodox
+  install_gh
   install_alacritty
   install_brave
   echo "> Bootstrap complete!"
@@ -326,4 +345,3 @@ else
     *)              for i in "${@}"; do install_${i} ; done ;;
   esac
 fi
-
