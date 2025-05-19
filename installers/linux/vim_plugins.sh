@@ -10,8 +10,8 @@ export core_repos=(
   dyng/ctrlsf.vim
   fatih/vim-go
   junegunn/vim-easy-align
-  lifepillar/vim-mucomplete
   mechatroner/rainbow_csv
+  mfussenegger/nvim-lint
   ngmy/vim-rubocop
   ntpeters/vim-better-whitespace
   tpope/vim-fugitive
@@ -24,14 +24,11 @@ export core_repos=(
 export aesthetic_repos=(
   ekalinin/Dockerfile.vim
   fenetikm/falcon
-  ftsamoyed/PinkCatBoo
   morhetz/gruvbox
   mxw/vim-jsx.git
   ntk148v/vim-horizon
   pangloss/vim-javascript
-  paramagicdev/vim-medic_chalk
   rakr/vim-one
-  rigellute/shades-of-purple.vim
   ryanoasis/vim-devicons
   scrooloose/nerdtree
   scrooloose/syntastic
