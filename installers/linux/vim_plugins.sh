@@ -42,9 +42,10 @@ export aesthetic_repos=(
 export nvim_repos=(
   marko-cerovac/material.nvim
   nvim-treesitter/nvim-treesitter
+  rebelot/kanagawa.nvim
 )
 
-N_CONCURRENT_DOWNLOADS=2
+N_CONCURRENT_DOWNLOADS=10
 
 function install_pathogen() {
   echo -e "\n- Installing Pathogen (plugin/plugin manager)"
@@ -77,7 +78,7 @@ function install_plugin_category() {
   cd "${HOME}/.vim/bundle"
   echo -e "\n- Installing (${1} plugins)"
 
-  printf "%s\n" "${@}" | parallel -n 1 -P ${N_CONCURRENT_DOWNLOADS} install_plugin
+  printf "%s\n" "${@}" | parallel -n1 -P ${N_CONCURRENT_DOWNLOADS} install_plugin
 }
 
 function install_all_plugins() {
@@ -93,6 +94,6 @@ if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
 else
   nvim="${1:-}"
   install_all_plugins
-  [ -n "${nvim}" ] && install_plugin_category "nvim_repos"
+  [ -n "${nvim}" ] && install_plugin_category ${nvim_repos[@]}
 fi
 
